@@ -31,6 +31,36 @@ module.exports = async function transpileLispToJavascript (hook)  {
     return "CONST_INT";
   });
   
+  lexer.addRule(/or/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "OR"
+  });
+  
+  lexer.addRule(/and/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "AND"
+  });
+  
+  lexer.addRule(/not/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "NOT"
+  });
+  
+  lexer.addRule(/nil/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "NIL"
+  });
+  
+  lexer.addRule(/defvar/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "DEFVAR"
+  });
+  
+  lexer.addRule(/let/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "LET"
+  });
+  
   lexer.addRule(/[a-z]*/, function (lexeme) {
     if (lexeme!=="") {
       lexemes.push(lexeme);
@@ -46,6 +76,31 @@ module.exports = async function transpileLispToJavascript (hook)  {
   lexer.addRule(/\)/, function (lexeme) {
     lexemes.push(lexeme);
     return "PARENTHESIS_CLOSE"
+  });
+  
+  lexer.addRule(/\+/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "PLUS"
+  });
+  
+  lexer.addRule(/\-/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "MINUS"
+  });
+  
+  lexer.addRule(/\*/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "MULT"
+  });
+  
+  lexer.addRule(/\//, function (lexeme) {
+    lexemes.push(lexeme);
+    return "DIV"
+  });
+  
+  lexer.addRule(/\=/, function (lexeme) {
+    lexemes.push(lexeme);
+    return "EQUALS"
   });
   
   lexer.addRule(/$/, function () {
