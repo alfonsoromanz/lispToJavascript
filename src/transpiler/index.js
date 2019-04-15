@@ -73,6 +73,14 @@ module.exports = async function transpileLispToJavascript (hook)  {
     lexemes.push(lexeme);
     return "LET"
   });
+
+  lexer.addRule(/'[a-z]*'/, function (lexeme) {
+    if (lexeme!=="") {
+      this.yytext = lexeme;
+      lexemes.push(lexeme);
+      return "STRING";
+    }  
+  });
   
   lexer.addRule(/[a-z]*/, function (lexeme) {
     if (lexeme!=="") {
