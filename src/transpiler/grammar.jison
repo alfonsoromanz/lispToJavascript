@@ -20,23 +20,24 @@ sentence
     ;
 
 variable_declaration
-    : PAREN_OPEN LET BLANK IDENTIFIER BLANK expression PAREN_CLOSE
+    : PAREN_OPEN LET BLANK IDENTIFIER BLANK s_expression PAREN_CLOSE
         {$$ = `let ${$4} = ${$6};`}
     ;
 
-expression 
-    : CONST_INT
-    | IDENTIFIER
-    | arithmetic_operation
-    ; 
+s_expression
+    : atom
+    | PAREN_OPEN s_expression DOT s_expression PAREN_CLOSE
+    | PAREN_OPEN list PAREN_CLOSE
+        {$$ = `[${$2}]`}
+    ;
+list
+    : list BLANK s_expression
+        {$$=`${$1}, ${$3}`}
+    | s_expression
+        {$$=$1}
+    ;
 
-arithmetic_operation
-    : expression PLUS expression
-        {$$ = `${$1} + ${$3}`}
-    | expression MINUS expression
-        {$$ = `${$1} - ${$3}`}
-    | expression DIV expression
-        {$$ = `${$1} - ${$3}`}
-    | expression MULT expression
-        {$$ = `${$1} * ${$3}`}
+atom
+    : IDENTIFIER
+    | CONST_INT 
     ;
