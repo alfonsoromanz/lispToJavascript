@@ -5,9 +5,11 @@
  * @returns {Promise<void>}
  * @author Alfonso
  */
+const fs = require('fs');
+const path = require('path');
 const Lexer = require('lex');
-const Parser = require("jison").Parser;
-const Grammar = require('./grammar')
+const Parser = require('jison').Parser;
+const Grammar = fs.readFileSync(path.join(__dirname,'grammar.jison'), 'utf8');
 
 module.exports = async function transpileLispToJavascript (hook)  {
   const lispCode = hook.data.lispCode;
@@ -83,25 +85,25 @@ module.exports = async function transpileLispToJavascript (hook)  {
   lexer.addRule(/\(/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "PARENTHESIS_OPEN"
+    return "PAREN_OPEN"
   });
   
   lexer.addRule(/\)/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "PARENTHESIS_CLOSE"
+    return "PAREN_CLOSE"
   });
   
   lexer.addRule(/\+/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "PLUS"
+    return 'PLUS'
   });
   
   lexer.addRule(/\-/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "MINUS"
+    return 'MINUS'
   });
   
   lexer.addRule(/\*/, function (lexeme) {
