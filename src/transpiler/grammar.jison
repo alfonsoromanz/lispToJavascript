@@ -17,11 +17,18 @@ list_of_sentences
 sentence
     : variable_declaration
         {$$=$1}
+    | variable_assignment
+        {$$=$1}
     ;
 
 variable_declaration
     : PAREN_OPEN DEFVAR BLANK IDENTIFIER BLANK s_expression PAREN_CLOSE
         {$$ = `let ${$4} = ${$6};`}
+    ;
+
+variable_assignment
+    : PAREN_OPEN SETQ BLANK IDENTIFIER BLANK s_expression PAREN_CLOSE
+        {$$= `${$4} = ${$6};`}
     ;
 
 s_expression

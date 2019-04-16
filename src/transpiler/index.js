@@ -77,7 +77,13 @@ module.exports = async function transpileLispToJavascript (hook)  {
   lexer.addRule(/defvar/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "LET"
+    return "DEFVAR"
+  });
+
+  lexer.addRule(/setq/, function (lexeme) {
+    this.yytext = lexeme;
+    lexemes.push(lexeme);
+    return "SETQ"
   });
 
   lexer.addRule(/'[a-z]*'/, function (lexeme) {
