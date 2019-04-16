@@ -1,5 +1,9 @@
 %start lisp_program
 
+%{
+var functions = [];
+%}
+
 %% /* language grammar */
 
 lisp_program 
@@ -74,13 +78,38 @@ function_declaration
             sentences.map(s=>{
                 buffer += `${s};`;
             })
+            functions.push($4);
             $$=`function ${$4}(${$7}) { ${buffer} }` 
         }
     ;
 
+
 atom_list
     : PAREN_OPEN list PAREN_CLOSE
-        {$$ = `[${$2}]`}
+        {   
+            /* We can't distinguish an atom_list from a function call at
+            *  compilation time. In LISP, this is done by the interpreter.
+            *  To solve that problem, every time I find an atom_list, I check
+            *  if its a function call by checking if the first symbol matches
+            *  a previously declared function.
+            */
+            
+            let elements = String($2).split(',');
+            let first = elements[0].trim();
+            if (functions.indexOf(first)!==-1) {
+                let bffer = "";
+                for (let i=1; i<elements.length; i++) {
+                    const el = elements[i];
+                    if (i===elements.length-1)
+                        bffer += el.trim();
+                    else
+                        bffer += `${el.trim()}, `;
+                }
+                $$ = `${first}(${bffer})`
+            } else {
+                $$ = `[${$2}]`
+            }      
+        }
     ;
 list
     : list BLANK s_expression
