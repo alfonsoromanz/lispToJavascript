@@ -19,6 +19,8 @@ sentence
         {$$=$1}
     | variable_assignment
         {$$=$1}
+    | BLANK
+        {$$=''}
     ;
 
 variable_declaration
