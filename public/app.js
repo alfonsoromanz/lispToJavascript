@@ -19,7 +19,7 @@ const convertCode = () => {
     const transpiledInput = document.querySelector('#transpiledCode');
     console.log(result);
     if (result.success) {
-      transpiledInput.value = result.javascript;
+      transpiledInput.value = result.javascript.replace(/;/g, '; \n');
     } else {
         let errorMessage = ""
         for(let i=0; i<result.errors.length; i++) {

@@ -10,7 +10,7 @@ lisp_program
     : list_of_sentences EOF
         {   //remove the excess of semicolons caused by blanks
             let final_sentences = $1;
-            final_sentences = final_sentences.replace(/;+/g, '; ');
+            final_sentences = final_sentences.replace(/;+/g, ';');
             return final_sentences;    
         }
     ;
@@ -79,7 +79,7 @@ function_declaration
                 buffer += `${s};`;
             })
             functions.push($4);
-            $$=`function ${$4}(${$7}) { ${buffer} }` 
+            $$=`function ${$4}(${$7}) {\n${buffer}}` 
         }
     ;
 
