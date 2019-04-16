@@ -38,12 +38,25 @@ s_expression
     | PAREN_OPEN s_expression DOT s_expression PAREN_CLOSE
     | PAREN_OPEN list PAREN_CLOSE
         {$$ = `[${$2}]`}
+    | PAREN_OPEN arithmetic_operation PAREN_CLOSE
+        {$$ = $2}
     ;
 list
     : list BLANK s_expression
         {$$=`${$1}, ${$3}`}
     | s_expression
         {$$=$1}
+    ;
+
+arithmetic_operation
+    : PLUS BLANK s_expression BLANK s_expression
+        {$$ = `${$3} + ${$5}`}
+    | MINUS BLANK s_expression BLANK s_expression
+        {$$ = `${$3} - ${$5}`}
+    | MULT BLANK s_expression BLANK s_expression
+        {$$ = `${$3} * ${$5}`}
+    |  DIV BLANK s_expression BLANK s_expression
+        {$$ = `${$3} / ${$5}`}
     ;
 
 atom
