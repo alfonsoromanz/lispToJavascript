@@ -154,7 +154,14 @@ module.exports = async function transpileLispToJavascript (hook)  {
     return "EOF";
   });
   
-  const javascript = parser.parse(lispCode);
+  let javascript = undefined;
+
+  try {
+    javascript = parser.parse(lispCode);
+  } catch (e) {
+    errors.push(e.message);
+  }
+  
   
   hook.result = {
     success: errors.length===0,
