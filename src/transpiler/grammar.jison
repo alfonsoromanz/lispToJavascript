@@ -20,7 +20,7 @@ sentence
     ;
 
 variable_declaration
-    : PAREN_OPEN LET BLANK IDENTIFIER BLANK s_expression PAREN_CLOSE
+    : PAREN_OPEN DEFVAR BLANK IDENTIFIER BLANK s_expression PAREN_CLOSE
         {$$ = `let ${$4} = ${$6};`}
     ;
 
