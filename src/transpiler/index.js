@@ -149,6 +149,18 @@ module.exports = async function transpileLispToJavascript (hook)  {
     lexemes.push(lexeme);
     return "EQUALS"
   });
+
+  lexer.addRule(/>/, function (lexeme) {
+    this.yytext = lexeme;
+    lexemes.push(lexeme);
+    return "GREATER_THAN"
+  });
+
+  lexer.addRule(/</, function (lexeme) {
+    this.yytext = lexeme;
+    lexemes.push(lexeme);
+    return "LOWER_THAN"
+  });
   
   lexer.addRule(/$/, function () {
     return "EOF";

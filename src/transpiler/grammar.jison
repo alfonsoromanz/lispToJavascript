@@ -56,6 +56,8 @@ s_expression
     : atom
     | PAREN_OPEN s_expression DOT s_expression PAREN_CLOSE
     | atom_list
+    | condition
+    | logic_operation
     | PAREN_OPEN arithmetic_operation PAREN_CLOSE
         {$$ = $2}
     ;
@@ -111,6 +113,7 @@ atom_list
             }      
         }
     ;
+
 list
     : list BLANK s_expression
         {$$=`${$1}, ${$3}`}
@@ -127,6 +130,38 @@ arithmetic_operation
         {$$ = `${$3} * ${$5}`}
     |  DIV BLANK s_expression BLANK s_expression
         {$$ = `${$3} / ${$5}`}
+    ;
+
+logic_operation
+    : OR BLANK s_expression BLANK s_expression
+        {
+            /*
+            * Currently this format doesn't allow to have conditions
+            * with more than 2 expressions (like > and < in LISP)
+            * That feature is problematic since we use the non-terminal
+            * "list" not only for expressions but also for arrays and 
+            * function calls. 
+            *
+            * One way to solve that is: instead of generating code when
+            * a list is being recognized we can save the last expressions
+            * into a stack and decide how to use them later when a new rule is
+            * found (e.g array, function call, or logic_operations)
+            */
+            $$ = `${$3} || ${$5}`
+        }
+    | AND BLANK s_expression BLANK s_expression
+        {$$ = `${$3} && ${$5}`}
+    | NOT BLANK s_expression
+        {$$ = `!${$3}`}
+    ;
+
+condition 
+    : PAREN_OPEN EQUALS BLANK s_expression BLANK s_expression PAREN_CLOSE
+        {$$ = `${$4} === ${$6}`}
+    | PAREN_OPEN GREATER_THAN BLANK s_expression BLANK s_expression PAREN_CLOSE
+        {$$ = `${$4} > ${$6}`}
+    | PAREN_OPEN LOWER_THAN BLANK s_expression BLANK s_expression PAREN_CLOSE
+        {$$ = `${$4} < ${$6}`}
     ;
 
 atom
