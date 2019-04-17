@@ -92,6 +92,12 @@ module.exports = async function transpileLispToJavascript (hook)  {
     return "DEFUN"
   });
 
+  lexer.addRule(/if/, function (lexeme) {
+    this.yytext = lexeme;
+    lexemes.push(lexeme);
+    return "IF"
+  });
+
   lexer.addRule(/'[a-z]*'/, function (lexeme) {
     if (lexeme!=="") {
       this.yytext = lexeme;
