@@ -74,6 +74,17 @@ s_expression_list
 function_declaration
     : PAREN_OPEN function_name BLANK PAREN_OPEN list PAREN_CLOSE BLANK list_of_sentences PAREN_CLOSE
         {   
+            /*
+            * Adding a return to the last statement of a function - this will be removed
+            * in LISP functions, the last expression is returned. This works fine now 
+            * except for the cases where the last sentence is a conditional. This transpiler  
+            * is adding a return to that sentence too and its wrong.
+            * 
+            * For this version of LISP, a return statement will be required for returning
+            * the value of a function. Programmer will have to explicitly return values using
+            * 'return-from myfunc value'
+            */
+            
             let sentences = String($8).split(';');
             sentences = sentences.map(s=>s.trim()).filter(s=>s!=='');
             //add return to last expression
