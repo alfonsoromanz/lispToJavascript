@@ -40,6 +40,8 @@ sentence
         {$$=$1}
     | s_expression
         {$$=$1}
+    | print_sentence
+        {$$=$1}
     | BLANK
         {$$=''}
     ;
@@ -70,6 +72,13 @@ s_expression_list
     | s_expression
     ;
 
+
+print_sentence
+    : '(' PRINT BLANK s_expression ')'
+        {$$=`console.log(${$4})`}}
+    | '(' PRINT BLANK STRING ')'
+        {$$=`console.log(${$4})`}}
+    ;
 
 function_declaration
     : '(' function_name BLANK '(' list ')' BLANK list_of_sentences ')'
