@@ -72,9 +72,9 @@ s_expression_list
 
 
 function_declaration
-    : PAREN_OPEN DEFUN BLANK IDENTIFIER BLANK PAREN_OPEN list PAREN_CLOSE BLANK list_of_sentences PAREN_CLOSE
+    : PAREN_OPEN function_name BLANK PAREN_OPEN list PAREN_CLOSE BLANK list_of_sentences PAREN_CLOSE
         {   
-            let sentences = String($10).split(';');
+            let sentences = String($8).split(';');
             sentences = sentences.map(s=>s.trim()).filter(s=>s!=='');
             //add return to last expression
             sentences[sentences.length - 1] = `return ${sentences[sentences.length - 1]}`;
@@ -82,12 +82,18 @@ function_declaration
             sentences.map(s=>{
                 buffer += `${s};`;
             })
-            functions.push($4);
-            $$=`function ${$4}(${$7}) {\n${buffer}}` 
+           
+            $$=`function ${$2}(${$5}) {\n${buffer}}` 
         }
     ;
 
-
+function_name
+    : DEFUN BLANK IDENTIFIER
+        {
+            functions.push($3);
+            $$=$3;
+        }
+    ;
 atom_list
     : PAREN_OPEN list PAREN_CLOSE
         {   
@@ -155,6 +161,7 @@ logic_operation
         {$$ = `${$3} && ${$5}`}
     | NOT BLANK s_expression
         {$$ = `!${$3}`}
+    | s_expression
     ;
 
 condition 
@@ -167,7 +174,7 @@ condition
     ;
 
 if_sentence
-    : PAREN_OPEN IF BLANK condition BLANK sentence BLANK sentence PAREN_CLOSE
+    : PAREN_OPEN IF BLANK logic_operation BLANK sentence BLANK sentence PAREN_CLOSE
         {
             /*
             * The IF in lisp can only accept one statement for the then and else clause.
@@ -177,7 +184,7 @@ if_sentence
             * return certain values and I couldn't figure out yet when an 
             * statement inside an if should contain a return statement
             */
-            
+
             $$=`if (${$4}) {\n${$6}\n} else {\n${$8}\n}`
         }
     ;
