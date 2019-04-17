@@ -45,22 +45,22 @@ sentence
     ;
 
 variable_declaration
-    : PAREN_OPEN DEFVAR BLANK IDENTIFIER BLANK s_expression PAREN_CLOSE
+    : '(' DEFVAR BLANK IDENTIFIER BLANK s_expression ')'
         {$$ = `let ${$4} = ${$6};`}
     ;
 
 variable_assignment
-    : PAREN_OPEN SETQ BLANK IDENTIFIER BLANK s_expression PAREN_CLOSE
+    : '(' SETQ BLANK IDENTIFIER BLANK s_expression ')'
         {$$= `${$4} = ${$6};`}
     ;
 
 s_expression
     : atom
-    | PAREN_OPEN s_expression DOT s_expression PAREN_CLOSE
+    | '(' s_expression DOT s_expression ')'
     | atom_list
     | condition
     | logic_operation
-    | PAREN_OPEN arithmetic_operation PAREN_CLOSE
+    | '(' arithmetic_operation ')'
         {$$ = $2}
     ;
 
@@ -72,7 +72,7 @@ s_expression_list
 
 
 function_declaration
-    : PAREN_OPEN function_name BLANK PAREN_OPEN list PAREN_CLOSE BLANK list_of_sentences PAREN_CLOSE
+    : '(' function_name BLANK '(' list ')' BLANK list_of_sentences ')'
         {   
             /*
             * Adding a return to the last statement of a function - this will be removed
@@ -106,7 +106,7 @@ function_name
         }
     ;
 atom_list
-    : PAREN_OPEN list PAREN_CLOSE
+    : '(' list ')'
         {   
             /* We can't distinguish an atom_list from a function call at
             *  compilation time. In LISP, this is done by the interpreter.
@@ -141,13 +141,13 @@ list
     ;
 
 arithmetic_operation
-    : PLUS BLANK s_expression BLANK s_expression
+    : '+' BLANK s_expression BLANK s_expression
         {$$ = `${$3} + ${$5}`}
-    | MINUS BLANK s_expression BLANK s_expression
+    | '-' BLANK s_expression BLANK s_expression
         {$$ = `${$3} - ${$5}`}
-    | MULT BLANK s_expression BLANK s_expression
+    | '*' BLANK s_expression BLANK s_expression
         {$$ = `${$3} * ${$5}`}
-    |  DIV BLANK s_expression BLANK s_expression
+    |  '/' BLANK s_expression BLANK s_expression
         {$$ = `${$3} / ${$5}`}
     ;
 
@@ -176,16 +176,16 @@ logic_operation
     ;
 
 condition 
-    : PAREN_OPEN EQUALS BLANK s_expression BLANK s_expression PAREN_CLOSE
+    : '(' '=' BLANK s_expression BLANK s_expression ')'
         {$$ = `${$4} === ${$6}`}
-    | PAREN_OPEN GREATER_THAN BLANK s_expression BLANK s_expression PAREN_CLOSE
+    | '(' '>' BLANK s_expression BLANK s_expression ')'
         {$$ = `${$4} > ${$6}`}
-    | PAREN_OPEN LOWER_THAN BLANK s_expression BLANK s_expression PAREN_CLOSE
+    | '(' '<' BLANK s_expression BLANK s_expression ')'
         {$$ = `${$4} < ${$6}`}
     ;
 
 if_sentence
-    : PAREN_OPEN IF BLANK logic_operation BLANK sentence BLANK sentence PAREN_CLOSE
+    : '(' IF BLANK logic_operation BLANK sentence BLANK sentence ')'
         {
             /*
             * The IF in lisp can only accept one statement for the then and else clause.

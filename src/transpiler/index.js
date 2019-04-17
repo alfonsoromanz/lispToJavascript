@@ -117,55 +117,55 @@ module.exports = async function transpileLispToJavascript (hook)  {
   lexer.addRule(/\(/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "PAREN_OPEN"
+    return "("
   });
   
   lexer.addRule(/\)/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "PAREN_CLOSE"
+    return ")"
   });
   
   lexer.addRule(/\+/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return 'PLUS'
+    return '+'
   });
   
   lexer.addRule(/\-/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return 'MINUS'
+    return '-'
   });
   
   lexer.addRule(/\*/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "MULT"
+    return "*"
   });
   
   lexer.addRule(/\//, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "DIV"
+    return "/"
   });
   
   lexer.addRule(/\=/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "EQUALS"
+    return "="
   });
 
   lexer.addRule(/>/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "GREATER_THAN"
+    return ">"
   });
 
   lexer.addRule(/</, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "LOWER_THAN"
+    return "<"
   });
   
   lexer.addRule(/$/, function () {
