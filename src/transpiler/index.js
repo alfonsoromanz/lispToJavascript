@@ -32,7 +32,7 @@ module.exports = async function transpileLispToJavascript (hook)  {
     line++;
   }, []);
   
-  lexer.addRule(/[0-9]/, function (lexeme) {
+  lexer.addRule(/[0-9]*/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
     return "CONST_INT";
@@ -78,6 +78,12 @@ module.exports = async function transpileLispToJavascript (hook)  {
     this.yytext = lexeme;
     lexemes.push(lexeme);
     return "RETURNFROM"
+  });
+
+  lexer.addRule(/progn/, function (lexeme) {
+    this.yytext = lexeme;
+    lexemes.push(lexeme);
+    return "PROGN"
   });
 
   lexer.addRule(/defvar/, function (lexeme) {

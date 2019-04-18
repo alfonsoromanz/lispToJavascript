@@ -222,16 +222,19 @@ condition
 if_sentence
     : '(' IF BLANK condition BLANK sentence BLANK sentence ')'
         {
-            /*
-            * The IF in lisp can only accept one statement for the then and else clause.
-            * To add several statements, 'PROGN' should be used but it is not supported
-            * here.
-            * One issue encountered is that sometimes the IF is used within a function to
-            * return certain values and I couldn't figure out yet when an 
-            * statement inside an if should contain a return statement
-            */
-
             $$=`if (${$4}) {\n${$6}\n} else {\n${$8}\n}`
+        }
+    | '(' IF BLANK condition BLANK '(' PROGN BLANK list_of_sentences ')' BLANK sentence ')'
+        {
+            $$=`if (${$4}) {\n${$9}\n} else {\n${$12}\n}`
+        }
+    | '(' IF BLANK condition BLANK '(' PROGN BLANK list_of_sentences ')' BLANK '(' PROGN BLANK list_of_sentences ')' ')'
+        {
+            $$=`if (${$4}) {\n${$9}\n} else {\n${$15}\n}`
+        }
+     | '(' IF BLANK condition BLANK sentence BLANK '(' PROGN BLANK list_of_sentences ')' ')'
+        {
+            $$=`if (${$4}) {\n${$6}\n} else {\n${$11}\n}`
         }
     ;
 atom
