@@ -216,6 +216,8 @@ condition
         {$$ = `${$4} > ${$6}`}
     | '(' '<' BLANK s_expression BLANK s_expression ')'
         {$$ = `${$4} < ${$6}`}
+    | '(' '/=' BLANK s_expression BLANK s_expression ')'
+        {$$ = `${$4} !== ${$6}`}
     | s_expression
     ;
 

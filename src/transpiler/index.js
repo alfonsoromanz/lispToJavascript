@@ -174,6 +174,12 @@ module.exports = async function transpileLispToJavascript (hook)  {
     return "="
   });
 
+  lexer.addRule(/\/=/, function (lexeme) {
+    this.yytext = lexeme;
+    lexemes.push(lexeme);
+    return "/="
+  });
+
   lexer.addRule(/>/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
