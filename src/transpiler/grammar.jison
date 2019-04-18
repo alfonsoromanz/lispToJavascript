@@ -11,6 +11,7 @@ lisp_program
         {   //remove the excess of semicolons caused by blanks
             let final_sentences = $1;
             final_sentences = final_sentences.replace(/;+/g, ';');
+            final_sentences = final_sentences.replace(/\n;/g, '');
             return final_sentences;    
         }
     ;
@@ -44,6 +45,7 @@ sentence
         {$$=$1}
     | return_sentence
         {$$=$1}
+    | loop_sentence
     | BLANK
         {$$=''}
     ;
@@ -78,6 +80,10 @@ return_sentence
         {$$=`return ${$6}`}
     ;
 
+loop_sentence
+    : '(' LOOP list_of_sentences '(' WHEN BLANK condition BLANK  '(' RETURN BLANK IDENTIFIER ')' ')' ')'
+        {$$=`while (${$7}) {\n\n${$3}}`}
+    ;
 print_sentence
     : '(' PRINT BLANK s_expression ')'
         {$$=`console.log(${$4})`}}
