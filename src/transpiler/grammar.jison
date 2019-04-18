@@ -100,7 +100,7 @@ function_declaration
             */
 
             //Commenting below because now a return statement is mandatory
-            
+
             //let sentences = String($8).split(';');
             //sentences = sentences.map(s=>s.trim()).filter(s=>s!=='');
             //add return to last expression
@@ -113,6 +113,22 @@ function_declaration
             //$$=`function ${$2}(${$5}) {\n${buffer}}`
 
             $$=`function ${$2}(${$5}) {\n${$8}}`
+
+
+            /* More Comments about the commented code above:
+            *
+            * in LISP functions, the last expression is returned. Because of that I was adding 
+            * a return statement to the last sentence of the lisp function. The thing is, 
+            * the IF statement is also considered a sentence, so if the last sentence of a 
+            * function was a conditional, the parser was adding a return to the IF sentence and
+            * that doesn't make sense. We can't know the context of where the conditional is being
+            * used, so I can't decide where should I add a return statement. 
+            * 
+            * For that reason, I stopped adding a return statement to the last sentence of a lisp
+            * function. Instead, the programmer will be required to add a return-from statement 
+            * explicitly to return a value inside a function.
+            *
+            */
         }
     ;
 
