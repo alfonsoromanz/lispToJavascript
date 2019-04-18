@@ -19,7 +19,7 @@ lisp_program
 list_of_sentences
     : list_of_sentences sentence
         {   
-            $$= `${$1};${$2}`
+            $$= `${$1};\n${$2}`
         } 
     | sentence
         {   
@@ -82,7 +82,9 @@ return_sentence
 
 loop_sentence
     : '(' LOOP list_of_sentences '(' WHEN BLANK condition BLANK  '(' RETURN BLANK IDENTIFIER ')' ')' ')'
-        {$$=`while (${$7}) {\n\n${$3}}`}
+        {$$=`while (${$7}) {\n${$3}\n}`}
+    | '(' LOOP list_of_sentences ')'
+        {$$=`while (true) {\n${$3}\n}`}
     ;
 print_sentence
     : '(' PRINT BLANK s_expression ')'

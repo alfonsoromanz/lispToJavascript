@@ -134,7 +134,7 @@ module.exports = async function transpileLispToJavascript (hook)  {
     return "IF"
   });
 
-  lexer.addRule(/'[\s\S]*'/, function (lexeme) {
+  lexer.addRule(/"[\s\S]*"/, function (lexeme) {
     if (lexeme!=="") {
       this.yytext = lexeme;
       lexemes.push(lexeme);
