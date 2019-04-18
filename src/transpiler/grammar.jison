@@ -42,6 +42,8 @@ sentence
         {$$=$1}
     | print_sentence
         {$$=$1}
+    | return_sentence
+        {$$=$1}
     | BLANK
         {$$=''}
     ;
@@ -58,7 +60,6 @@ variable_assignment
 
 s_expression
     : atom
-    | '(' s_expression DOT s_expression ')'
     | atom_list
     | condition
     | logic_operation
@@ -72,6 +73,10 @@ s_expression_list
     | s_expression
     ;
 
+return_sentence
+    : '(' RETURNFROM BLANK IDENTIFIER BLANK s_expression ')'
+        {$$=`return ${$6}`}
+    ;
 
 print_sentence
     : '(' PRINT BLANK s_expression ')'
@@ -84,7 +89,7 @@ function_declaration
     : '(' function_name BLANK '(' list ')' BLANK list_of_sentences ')'
         {   
             /*
-            * Adding a return to the last statement of a function - this will be removed
+            * Adding a return to the last statement of a function - this will be removed.
             * in LISP functions, the last expression is returned. This works fine now 
             * except for the cases where the last sentence is a conditional. This transpiler  
             * is adding a return to that sentence too and its wrong.
@@ -93,17 +98,21 @@ function_declaration
             * the value of a function. Programmer will have to explicitly return values using
             * 'return-from myfunc value'
             */
+
+            //Commenting below because now a return statement is mandatory
             
-            let sentences = String($8).split(';');
-            sentences = sentences.map(s=>s.trim()).filter(s=>s!=='');
+            //let sentences = String($8).split(';');
+            //sentences = sentences.map(s=>s.trim()).filter(s=>s!=='');
             //add return to last expression
-            sentences[sentences.length - 1] = `return ${sentences[sentences.length - 1]}`;
-            let buffer = "";
-            sentences.map(s=>{
-                buffer += `${s};`;
-            })
+            //sentences[sentences.length - 1] = `return ${sentences[sentences.length - 1]}`;
+            //let buffer = "";
+            //sentences.map(s=>{
+                //buffer += `${s};`;
+            //})
            
-            $$=`function ${$2}(${$5}) {\n${buffer}}` 
+            //$$=`function ${$2}(${$5}) {\n${buffer}}`
+
+            $$=`function ${$2}(${$5}) {\n${$8}}`
         }
     ;
 
@@ -161,7 +170,7 @@ arithmetic_operation
     ;
 
 logic_operation
-    : OR BLANK s_expression BLANK s_expression
+    : '(' OR BLANK condition BLANK condition ')'
         {
             /*
             * Currently this format doesn't allow to have conditions
@@ -177,11 +186,11 @@ logic_operation
             */
             $$ = `${$3} || ${$5}`
         }
-    | AND BLANK s_expression BLANK s_expression
+    | '(' AND BLANK condition BLANK condition ')'
         {$$ = `${$3} && ${$5}`}
-    | NOT BLANK s_expression
+    | '(' NOT BLANK condition ')'
         {$$ = `!${$3}`}
-    | s_expression
+    | condition
     ;
 
 condition 
@@ -191,10 +200,11 @@ condition
         {$$ = `${$4} > ${$6}`}
     | '(' '<' BLANK s_expression BLANK s_expression ')'
         {$$ = `${$4} < ${$6}`}
+    | s_expression
     ;
 
 if_sentence
-    : '(' IF BLANK logic_operation BLANK sentence BLANK sentence ')'
+    : '(' IF BLANK condition BLANK sentence BLANK sentence ')'
         {
             /*
             * The IF in lisp can only accept one statement for the then and else clause.
