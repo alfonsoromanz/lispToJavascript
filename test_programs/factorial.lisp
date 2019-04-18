@@ -3,4 +3,4 @@
 (return-from factorial (* n (factorial (- n 1)))))
 )
 
-(factorial 10)
+(print (factorial 10))
