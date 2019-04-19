@@ -9,7 +9,60 @@ Give it a try at
 [http://lisptojavascript.com](http://lisptojavascript.com)
 
 ### Test programs
-To do.
+
+#### Factorial
+
+Lisp:
+```
+(defun factorial (n) 
+(if (= n 0) (return-from factorial 1) 
+(return-from factorial (* n (factorial (- n 1)))))
+)
+
+(print (factorial 10))
+```
+Transpiles to:
+````
+function factorial(n) {
+if (n === 0) {
+return 1
+} else {
+return n * factorial(n - 1)
+};
+};
+console.log(factorial(10));
+````
+
+#### Sum of two numbers (function)
+Lisp:
+
+````
+(defvar count 10)
+(loop (if (> count 1) 
+(setq count (- count 1)) 
+(progn 
+(setq count (- count 1))
+(print "last iteration"))) 
+(when (> count 0) (return count)))
+````
+
+Transpiles to:
+
+````
+var count = 10;
+while (count > 0) {
+if (count > 1) {
+count = count - 1;
+} else {
+count = count - 1;
+console.log("last iteration")
+};
+};
+````
+
+#### Other examples
+
+Check more test programs [here](https://github.com/onfleet/alfonso-backend-homework/tree/master/test_programs)
 
 ## Supported features
 
