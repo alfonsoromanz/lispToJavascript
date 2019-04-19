@@ -71,15 +71,30 @@ Check more test programs [here](https://github.com/onfleet/alfonso-backend-homew
 Basic arithmetic is supported: addition, subtraction, multiplication and division.
 
 ````lisp
-(+ 3 2) ; 3 + 2 
-(- a b) ; a - b
-(- a (* b 3)) ; a - b * 3
-(/ (* a 2) (- a (+ 3 5))) ; a * 2 / a - 3 + 5;
+(+ 3 2) //3 + 2 
+(- a b) //a - b
+(- a (* b 3)) // a - b * 3
+(/ (* a 2) (- a (+ 3 5))) // a * 2 / a - 3 + 5;
 ````
 ### Variable declarations
-To do.
+Gobal and local variables are supported using `defvar` and `let`
+````lisp
+(defvar a 2) ; var a = 2;
+(defvar b 3) ; var b = 3;
+(defvar c (- a (* b 3))) ; var c = a - b * 3;
+(let c b) ; let c = b;
+````
+
 ### Variable assignments
-To do.
+Values can be assigned to variables during declaration (see above) or using `setq`
+
+````
+lisp
+(setq a 2) ; a = 2;
+(setq c (- a (* b 3))) ; c = a - b * 3;
+(setq x (sum y z)) ; x = sum(y, z) if sum is a declared function
+```` 
+
 ### Function declarations
 To do.
 ### Function calls
