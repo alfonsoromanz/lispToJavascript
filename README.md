@@ -71,10 +71,10 @@ Check more test programs [here](https://github.com/onfleet/alfonso-backend-homew
 Basic arithmetic is supported: addition, subtraction, multiplication and division.
 
 ````lisp
-(+ 3 2) //3 + 2 
-(- a b) //a - b
-(- a (* b 3)) // a - b * 3
-(/ (* a 2) (- a (+ 3 5))) // a * 2 / a - 3 + 5;
+(+ 3 2) ; 3 + 2 
+(- a b) ; a - b
+(- a (* b 3)) ; a - b * 3
+(/ (* a 2) (- a (+ 3 5))) ; a * 2 / a - 3 + 5;
 ````
 ### Variable declarations
 To do.
