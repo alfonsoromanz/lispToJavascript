@@ -139,7 +139,36 @@ if (a === b) {
 ```` 
 
 ## Loops
+Syntax for loops:
 
+`(loop <list_of_sentences> [(when <condition> return <expression>)])`
+
+### Examples:
+
+````lisp
+(loop (setq a (+ a 1)) (when (> a 10) (return a)))
+```` 
+Is equivalent to: 
+
+````javascript
+while (a > 10) {
+  a = a + 1;
+};
+```` 
+
+If the `when` clause is not provided, it will produce an infinite loop:
+
+````lisp
+(loop (setq a (+ a 1)))
+```` 
+
+Javascript:
+
+````javascript
+while (true) {
+  a = a + 1;
+};
+```` 
 
 ## Function declarations
 Functions are declared using the token `defun`. 
