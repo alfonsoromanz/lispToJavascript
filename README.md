@@ -266,6 +266,29 @@ function sumThreeNumbers(a, b, c) {
 sumThreeNumbers(10, 5, 1);
 ````
 
+## Lists
+
+Lists are supported but none feature was developed yet.
+
+Syntax for lists:
+
+`( <expression> [<expression>]* )`
+
+(One or more expressions surrounded by parenthesis).
+
+**Note:** if the first expression is an identifier and matches the name of a declared function, the list will be recognized as a function call.
+
+### Example 
+
+````lisp
+(defvar a (1 2 3 4))
+````
+
+Transpiles to:
+
+```javascript
+var a = [1, 2, 3, 4];
+````
 
 # Limitations and problems encountered
 To do.
