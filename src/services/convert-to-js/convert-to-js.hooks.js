@@ -1,11 +1,12 @@
-const transpileLispToJavascript =require('../../transpiler/')
+const transpileLispToJavascript=require('../../transpiler/');
+const checkParameters=require('../../hooks/checkParameters');
 
 module.exports = {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [transpileLispToJavascript],
+    create: [checkParameters, transpileLispToJavascript],
     update: [],
     patch: [],
     remove: []
