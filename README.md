@@ -8,9 +8,9 @@ This repository contains a Javascript transpiler for a simplified version of the
 Give it a try at
 [http://lisptojavascript.com](http://lisptojavascript.com)
 
-### Test programs
+## Test programs
 
-#### Factorial
+### Factorial
 
 Lisp:
 ```
@@ -33,7 +33,7 @@ return n * factorial(n - 1)
 console.log(factorial(10));
 ````
 
-#### Sum of two numbers (function)
+### Sum of two numbers (function)
 Lisp:
 
 ````
@@ -60,14 +60,22 @@ console.log("last iteration")
 };
 ````
 
-#### Other examples
+### Other examples
 
 Check more test programs [here](https://github.com/onfleet/alfonso-backend-homework/tree/master/test_programs)
 
 ## Supported features
 
 ### Arithmetic operations
-To do.
+
+Basic arithmetic is supported: addition, subtraction, multiplication and division.
+
+````
+(+ 3 2) //3 + 2 
+(- a b) //a - b
+(- a (* b 3)) // a - b * 3
+(/ (* a 2) (- a (+ 3 5))) // a * 2 / a - 3 + 5;
+````
 ### Variable declarations
 To do.
 ### Variable assignments
