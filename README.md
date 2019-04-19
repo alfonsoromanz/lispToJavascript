@@ -95,7 +95,63 @@ Values can be assigned to variables during declaration (see above) or using `set
 ```` 
 
 ### Function declarations
-To do.
+Functions are declared using the token `defun`. 
+
+Syntax for function declaration:
+
+```
+(defun <function_name> (<params>) <list_of_sentences>)
+```
+Where:
++ `<function_name>`: should be an identifier (one or more letters)
++ `<params>`: are zero or more expressions separated by blanks
++ `<list_of_sentences>`: one or more sentence (variable declaration, assignment, function declaration, function call, arithmetic operations, etc)
+
+**Important**: a function in LISP returns the value of the last expression evaluated as the return value, but this is not supported in this simplified LISP version. Instead, to return a value from a function it is required to use the `return-from` statement explicitly.
+
+```lisp
+return-from myfunction 10
+````
+
+#### Some Examples:
+
+Sum two numbers:
+
+````lisp
+(defun sum (a b) (return-from sum (+ a b)))
+```` 
+
+Transpiles to:
+````javascript
+function sum(a, b) {
+return a + b;
+};
+````
+
+**Recursive functions are also supported**. The following function:
+````lisp
+(defun printUntilZero (a) 
+(if (> a 0) (progn (print a) (setq a (- a 1)) (printUntilZero a)) (print a))
+)
+
+(printUntilZero 10)
+````
+
+Transpiles to:
+
+````javascript
+function printUntilZero(a) {
+  if (a > 0) {
+    console.log(a);
+    a = a - 1;
+    printUntilZero(a)
+  } else {
+    console.log(a)
+  };
+};
+printUntilZero(10);
+````
+
 ### Function calls
 To do.
 
