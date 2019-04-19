@@ -13,16 +13,26 @@ const Grammar = fs.readFileSync(path.join(__dirname,'grammar.jison'), 'utf8');
 
 module.exports = async function transpileLispToJavascript (hook)  {
   const lispCode = hook.data.lispCode;
-  let token = null;
   let tokens = [];
   let lexemes = [];
   let errors = [];
-  let line = 1;
+  
   
   const parser = new Parser(Grammar);
-  const lexer = parser.lexer = new Lexer;
-  
-  lexer.addRule(/ /, function (lexeme) {
+  const lexer = parser.lexer = new Lexer(function (char) {
+    //throw new Error(`Unexpected character ${char} on line ${parser.yy.lines}`);
+    errors.push(`Unexpected character ${char} on line ${parser.yy.lines}`);
+  });
+
+  // Configure the parser
+  parser.yy.lines=1;
+  parser.yy.parseError = function (err, hash) {
+    const error = err.split(':')[1];
+    throw new SyntaxError(`Parse error on line ${parser.yy.lines}: ${error}`);
+  };
+
+  // Configure the lexer
+  lexer.addRule(/ +/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
     tokens.push("BLANK")
@@ -30,7 +40,7 @@ module.exports = async function transpileLispToJavascript (hook)  {
   });
   
   lexer.addRule(/\n/, function () {  
-    line++;
+    parser.yy.lines++;
   }, []);
   
   lexer.addRule(/[0-9]*/, function (lexeme) {
