@@ -297,6 +297,7 @@ To do.
 
 ### POST `/convertToJS`
 
++ **URL:** www.lisptojavascript.com/convertToJS
 + **Description:** converts lisp code into javascript code.
 + **Requires:** `lispCode` (string) in JSON body.
 
@@ -314,6 +315,117 @@ Response:
 
 ### Examples
 
+#### Request with valid lisp code:
+
+```http
+POST /convertToJS HTTP/1.1
+Host: www.lisptojavascript.com
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 504d10e0-9213-4773-bc97-0f9ea2b3eb13
+
+{
+	"lispCode":"(defvar a 1)"
+}
+````
+
+Response:
+
+```json
+{
+    "success": true,
+    "lisp": "(defvar a 1)",
+    "javascript": "var a = 1;\n",
+    "tokens": [
+        "(",
+        "DEFVAR",
+        "BLANK",
+        "IDENTIFIER",
+        "BLANK",
+        "CONST_INT",
+        ")",
+        "CONST_INT"
+    ],
+    "lexemes": [
+        "(",
+        "defvar",
+        " ",
+        "a",
+        " ",
+        "1",
+        ")",
+        ""
+    ],
+    "errors": []
+}
+````
+
+#### Request with **non-valid** lisp code:
+
+```http
+POST /convertToJS HTTP/1.1
+Host: www.lisptojavascript.com
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 504d10e0-9213-4773-bc97-0f9ea2b3eb13
+
+{
+	"lispCode":"defvar a 1)"
+}
+````
+
+Response:
+
+```json
+{
+    "success": false,
+    "lisp": "defvar a 1)",
+    "tokens": [
+        "DEFVAR"
+    ],
+    "lexemes": [
+        "defvar"
+    ],
+    "errors": [
+        "Parse error on line 1: Unexpected 'DEFVAR'"
+    ]
+}
+````
+
+### POST `/isValidLisp`
+
++ **URL:** www.lisptojavascript.com/isValidLisp
++ **Description:** validates if the lisp code provided is sintactically valid.
++ **Requires:** `lispCode` (string) in JSON body.
+
+Response:
+```json
+{
+    "isValidLisp": <Boolean>
+}
+````
+
+### Example
+
+```http
+POST /isValidLisp HTTP/1.1
+Host: www.lisptojavascript.com
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 1f0d09af-7ef4-4321-8061-dca5aaacd483
+
+{
+	"lispCode":"(defvar a 1)"
+}
+````
+
+Response:
+
+```json
+{
+    "isValidLisp": true
+}
+````
 
 # Getting Started
 
