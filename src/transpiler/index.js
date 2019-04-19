@@ -25,6 +25,7 @@ module.exports = async function transpileLispToJavascript (hook)  {
   lexer.addRule(/ /, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("BLANK")
     return "BLANK";
   });
   
@@ -35,102 +36,119 @@ module.exports = async function transpileLispToJavascript (hook)  {
   lexer.addRule(/[0-9]*/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("CONST_INT")
     return "CONST_INT";
   });
   
   lexer.addRule(/or/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("OR")
     return "OR"
   });
   
   lexer.addRule(/and/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("AND")
     return "AND"
   });
   
   lexer.addRule(/not/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("NOT")
     return "NOT"
   });
   
   lexer.addRule(/nil/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("NIL")
     return "NIL"
   });
   
   lexer.addRule(/defvar/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("DEFVAR")
     return "DEFVAR"
   });
   
   lexer.addRule(/let/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("LET")
     return "LET"
   });
 
   lexer.addRule(/return-from/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("RETURNFROM")
     return "RETURNFROM"
   });
 
   lexer.addRule(/progn/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("PROGN")
     return "PROGN"
   });
 
   lexer.addRule(/loop/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("LOOP")
     return "LOOP"
   });
 
   lexer.addRule(/return/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("RETURN")
     return "RETURN"
   });
 
   lexer.addRule(/when/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("WHEN")
     return "WHEN"
   });
 
   lexer.addRule(/defvar/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("DEFVAR")
     return "DEFVAR"
   });
 
   lexer.addRule(/setq/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("SETQ")
     return "SETQ"
   });
 
   lexer.addRule(/defun/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("DEFUN")
     return "DEFUN"
   });
 
   lexer.addRule(/print/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("PRINT")
     return "PRINT"
   });
 
   lexer.addRule(/if/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("IF")
     return "IF"
   });
 
@@ -138,6 +156,7 @@ module.exports = async function transpileLispToJavascript (hook)  {
     if (lexeme!=="") {
       this.yytext = lexeme;
       lexemes.push(lexeme);
+      tokens.push("STRING")
       return "STRING";
     }  
   });
@@ -146,6 +165,7 @@ module.exports = async function transpileLispToJavascript (hook)  {
     if (lexeme!=="") {
       this.yytext = lexeme;
       lexemes.push(lexeme);
+      tokens.push("IDENTIFIER")
       return "IDENTIFIER";
     }  
   });
@@ -153,61 +173,71 @@ module.exports = async function transpileLispToJavascript (hook)  {
   lexer.addRule(/\(/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("(")
     return "("
   });
   
   lexer.addRule(/\)/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push(")")
     return ")"
   });
   
   lexer.addRule(/\+/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("+")
     return '+'
   });
   
   lexer.addRule(/\-/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("-")
     return '-'
   });
   
   lexer.addRule(/\*/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("*")
     return "*"
   });
   
   lexer.addRule(/\//, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("/")
     return "/"
   });
   
   lexer.addRule(/\=/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
+    tokens.push("=")
     return "="
   });
 
   lexer.addRule(/\/=/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "/="
+    tokens.push("/=")
+    return "/=";
   });
 
   lexer.addRule(/>/, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return ">"
+    tokens.push(">")
+    return ">";
   });
 
   lexer.addRule(/</, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
-    return "<"
+    tokens.push("<")
+    return "<";
   });
   
   lexer.addRule(/$/, function () {

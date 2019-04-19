@@ -294,7 +294,26 @@ var a = [1, 2, 3, 4];
 To do.
 
 # API
-To do.
+
+### POST `/convertToJS`
+
++ **Description:** converts lisp code into javascript code.
++ **Requires:** `lispCode` (string) in JSON body.
+
+Response:
+```json
+{
+    "success": <Boolean>,
+    "lisp": <String>,
+    "javascript": <String>,
+    "tokens": [<String>],
+    "lexemes": [<String>],
+    "errors": [<String>]
+}
+````
+
+### Examples
+
 
 # Getting Started
 
