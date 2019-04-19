@@ -24,7 +24,9 @@ list_of_sentences
         } 
     | sentence
         {   
-            $$=`${$1};\n`
+            if ($1!=='') {
+                $$=`${$1};\n`
+            }    
         }
     ;
 
