@@ -300,16 +300,17 @@ To do.
 + **URL:** www.lisptojavascript.com/convertToJS
 + **Description:** converts lisp code into javascript code.
 + **Requires:** `lispCode` (string) in JSON body.
++ **Returns:** the javascript equivalent code if the lisp is valid, and also the list of tokens and lexemes found.
 
 Response:
 ```json
 {
-    "success": <Boolean>,
-    "lisp": <String>,
-    "javascript": <String>,
-    "tokens": [<String>],
-    "lexemes": [<String>],
-    "errors": [<String>]
+    "success": "<Boolean>",
+    "lisp": "<String>",
+    "javascript": "<String>",
+    "tokens": ["<String>"],
+    "lexemes": ["<String>"],
+    "errors": ["<String>"]
 }
 ````
 
@@ -401,7 +402,7 @@ Response:
 Response:
 ```json
 {
-    "isValidLisp": <Boolean>
+    "isValidLisp": "<Boolean>"
 }
 ````
 
