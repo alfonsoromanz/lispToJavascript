@@ -12,7 +12,7 @@ const Parser = require('jison').Parser;
 const Grammar = fs.readFileSync(path.join(__dirname,'grammar.jison'), 'utf8');
 
 module.exports = async function transpileLispToJavascript (hook)  {
-  const lispCode = hook.data.lispCode;
+  let lispCode = hook.data.lispCode;
   let tokens = [];
   let lexemes = [];
   let errors = [];
@@ -32,7 +32,7 @@ module.exports = async function transpileLispToJavascript (hook)  {
   };
 
   // Configure the lexer
-  lexer.addRule(/ +/, function (lexeme) {
+  lexer.addRule(/ /, function (lexeme) {
     this.yytext = lexeme;
     lexemes.push(lexeme);
     tokens.push("BLANK")
@@ -255,6 +255,19 @@ module.exports = async function transpileLispToJavascript (hook)  {
   });
   
   let javascript = undefined;
+
+  /*
+  * Code preprocessing:
+  *   1 - Remove all repeated blanks
+  *   2 - Remove conflictive blanks before
+  *       and after parenthesis
+  */ 
+  lispCode = 
+    lispCode
+      .replace(/ +/g, ' ')
+      .replace(/\( +/g, '(')
+      .replace(/ +\)/g, ')');
+
 
   try {
     javascript = parser.parse(lispCode);
