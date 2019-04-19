@@ -51,12 +51,12 @@ Transpiles to:
 ````javascript
 var count = 10;
 while (count > 0) {
-if (count > 1) {
-count = count - 1;
-} else {
-count = count - 1;
-console.log("last iteration")
-};
+  if (count > 1) {
+    count = count - 1;
+  } else {
+    count = count - 1;
+    console.log("last iteration")
+  };
 };
 ````
 
@@ -94,6 +94,53 @@ Values can be assigned to variables during declaration (see above) or using `set
 (setq x (sum y z)) ; x = sum(y, z) if sum is a declared function
 ```` 
 
+### If-else statements
+
+Syntax:
+
+`(if <condition> <sentence_then> <sentence_else>)`
+
+Lisp only allows to have one sentence in the `then` branch and one sentence in the `else` branch. If you need to execute several sentences within any of the branches, you can use the special sentence `progn`:
+
+`(progn <list_of_sentences>)`
+
+#### Examples
+
+Simple if-else sentence:
+
+````lisp
+(if (> a b) (setq b a) (setq a b))
+```` 
+Is equivalent to:
+
+````javascript
+if (a > b) {
+  b = a;
+} else {
+  a = b;
+};
+```` 
+
+Using `prog-n` we can have multiple sentences in any of the branches:
+
+````lisp
+(if (= a b) (progn (setq a 0) (setq b 0)) (progn 
+(print a) (print b)))
+```` 
+
+````javascript
+if (a === b) {
+  a = 0;
+  b = 0;
+} else {
+  console.log(a);
+  console.log(b)
+};
+```` 
+
+### Loops
+
+
 ### Function declarations
 Functions are declared using the token `defun`. 
 
@@ -124,7 +171,7 @@ Sum two numbers:
 Transpiles to:
 ````javascript
 function sum(a, b) {
-return a + b;
+  return a + b;
 };
 ````
 
