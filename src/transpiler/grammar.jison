@@ -12,6 +12,7 @@ lisp_program
             let final_sentences = $1;
             final_sentences = final_sentences.replace(/;+/g, ';');
             final_sentences = final_sentences.replace(/\n;/g, '');
+            final_sentences = final_sentences.replace(/\n\n/g, '\n');
             return final_sentences;    
         }
     ;
@@ -23,28 +24,18 @@ list_of_sentences
         } 
     | sentence
         {   
-            if ($1!=='') 
-                $$=`${$1}`
-            else 
-                $$='';
+            $$=`${$1};\n`
         }
     ;
 
 sentence
     : variable_declaration
-        {$$=$1}
     | variable_assignment
-        {$$=$1}
     | function_declaration
-        {$$=$1}
     | if_sentence
-        {$$=$1}
     | s_expression
-        {$$=$1}
     | print_sentence
-        {$$=$1}
-    | return_sentence
-        {$$=$1}
+    | return_sentence 
     | loop_sentence
     | BLANK
         {$$=''}
@@ -67,8 +58,7 @@ s_expression
     | atom_list
     | condition
     | logic_operation
-    | '(' arithmetic_operation ')'
-        {$$ = $2}
+    | arithmetic_operation
     ;
 
 s_expression_list
@@ -185,14 +175,14 @@ list
     ;
 
 arithmetic_operation
-    : '+' BLANK s_expression BLANK s_expression
-        {$$ = `${$3} + ${$5}`}
-    | '-' BLANK s_expression BLANK s_expression
-        {$$ = `${$3} - ${$5}`}
-    | '*' BLANK s_expression BLANK s_expression
-        {$$ = `${$3} * ${$5}`}
-    |  '/' BLANK s_expression BLANK s_expression
-        {$$ = `${$3} / ${$5}`}
+    : '(' '+' BLANK s_expression BLANK s_expression ')'
+        {$$ = `${$4} + ${$6}`}
+    | '(' '-' BLANK s_expression BLANK s_expression ')'
+        {$$ = `${$4} - ${$6}`}
+    | '(' '*' BLANK s_expression BLANK s_expression ')'
+        {$$ = `${$4} * ${$6}`}
+    |  '(' '/' BLANK s_expression BLANK s_expression ')'
+        {$$ = `${$4} / ${$6}`}
     ;
 
 logic_operation
