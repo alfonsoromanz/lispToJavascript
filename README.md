@@ -93,6 +93,15 @@ Values can be assigned to variables during declaration (see above) or using `set
 (setq c (- a (* b 3))) ; c = a - b * 3;
 (setq x (sum y z)) ; x = sum(y, z) if sum is a declared function
 ```` 
+## Conditions
+The following operators are supported: `>`, `<`, `=`, and `/=`
+
+````lisp
+(> a b) ; a > b
+(< a 1) ; a > 1
+(= a (+ 2 2)) ; a === 2+2
+(/= 1 2) ; 1 !== 2
+````
 
 ## If-else statements
 
