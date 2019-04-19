@@ -33,7 +33,7 @@ return n * factorial(n - 1)
 console.log(factorial(10));
 ````
 
-### Sum of two numbers (function)
+### Simple iteration
 Lisp:
 
 ````lisp
@@ -153,14 +153,40 @@ printUntilZero(10);
 ````
 
 ### Function calls
-To do.
+Syntax for function calls:
+
+`(<function_name>  <params>)`
+
+Where:
++ `<function_name>`: must be an identifier (one or more letters) and should match an already declared function. Otherwhise, the sentence will be recognized as a list.
++ `<params>`: zero or more expressions
+
+
+#### Example:
+
+````lisp
+(defun sumThreeNumbers (a b c) 
+(return-from sumThreeNumbers (+ a (+ b c)))
+)
+
+(sumThreeNumbers 10 5 1)
+````
+
+Transpiles to:
+
+```javascript
+function sumThreeNumbers(a, b, c) {
+  return a + b + c;
+};
+sumThreeNumbers(10, 5, 1);
+````
 
 
 ## Limitations and problems encountered
 To do.
 
 ## API
-To do
+To do.
 
 ## Getting Started
 
