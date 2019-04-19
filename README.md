@@ -88,8 +88,7 @@ Gobal and local variables are supported using `defvar` and `let`
 ### Variable assignments
 Values can be assigned to variables during declaration (see above) or using `setq`
 
-````
-lisp
+````lisp
 (setq a 2) ; a = 2;
 (setq c (- a (* b 3))) ; c = a - b * 3;
 (setq x (sum y z)) ; x = sum(y, z) if sum is a declared function
