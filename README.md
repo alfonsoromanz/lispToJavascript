@@ -13,7 +13,7 @@ Give it a try at
 ### Factorial
 
 Lisp:
-```
+```lisp
 (defun factorial (n) 
 (if (= n 0) (return-from factorial 1) 
 (return-from factorial (* n (factorial (- n 1)))))
@@ -22,7 +22,7 @@ Lisp:
 (print (factorial 10))
 ```
 Transpiles to:
-````
+````javascript
 function factorial(n) {
 if (n === 0) {
 return 1
@@ -36,7 +36,7 @@ console.log(factorial(10));
 ### Sum of two numbers (function)
 Lisp:
 
-````
+````lisp
 (defvar count 10)
 (loop (if (> count 1) 
 (setq count (- count 1)) 
@@ -48,7 +48,7 @@ Lisp:
 
 Transpiles to:
 
-````
+````javascript
 var count = 10;
 while (count > 0) {
 if (count > 1) {
@@ -70,7 +70,7 @@ Check more test programs [here](https://github.com/onfleet/alfonso-backend-homew
 
 Basic arithmetic is supported: addition, subtraction, multiplication and division.
 
-````
+````lisp
 (+ 3 2) //3 + 2 
 (- a b) //a - b
 (- a (* b 3)) // a - b * 3
