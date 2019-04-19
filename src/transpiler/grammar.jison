@@ -52,6 +52,8 @@ sentence
 
 variable_declaration
     : '(' DEFVAR BLANK IDENTIFIER BLANK s_expression ')'
+        {$$ = `var ${$4} = ${$6};`}
+    | '(' LET BLANK IDENTIFIER BLANK s_expression ')'
         {$$ = `let ${$4} = ${$6};`}
     ;
 
