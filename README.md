@@ -64,9 +64,9 @@ while (count > 0) {
 
 Check more test programs [here](https://github.com/onfleet/alfonso-backend-homework/tree/master/test_programs)
 
-## Supported features
+# Supported features
 
-### Arithmetic operations
+## Arithmetic operations
 
 Basic arithmetic is supported: addition, subtraction, multiplication and division.
 
@@ -76,7 +76,7 @@ Basic arithmetic is supported: addition, subtraction, multiplication and divisio
 (- a (* b 3)) // a - b * 3
 (/ (* a 2) (- a (+ 3 5))) // a * 2 / a - 3 + 5;
 ````
-### Variable declarations
+## Variable declarations
 Gobal and local variables are supported using `defvar` and `let`
 ````lisp
 (defvar a 2) ; var a = 2;
@@ -85,7 +85,7 @@ Gobal and local variables are supported using `defvar` and `let`
 (let c b) ; let c = b;
 ````
 
-### Variable assignments
+## Variable assignments
 Values can be assigned to variables during declaration (see above) or using `setq`
 
 ````lisp
@@ -94,7 +94,7 @@ Values can be assigned to variables during declaration (see above) or using `set
 (setq x (sum y z)) ; x = sum(y, z) if sum is a declared function
 ```` 
 
-### If-else statements
+## If-else statements
 
 Syntax:
 
@@ -104,7 +104,7 @@ Lisp only allows to have one sentence in the `then` branch and one sentence in t
 
 `(progn <list_of_sentences>)`
 
-#### Examples
+### Examples
 
 Simple if-else sentence:
 
@@ -138,10 +138,10 @@ if (a === b) {
 };
 ```` 
 
-### Loops
+## Loops
 
 
-### Function declarations
+## Function declarations
 Functions are declared using the token `defun`. 
 
 Syntax for function declaration:
@@ -160,7 +160,7 @@ Where:
 return-from myfunction 10
 ````
 
-#### Some Examples:
+### Some Examples:
 
 Sum two numbers:
 
@@ -199,7 +199,7 @@ function printUntilZero(a) {
 printUntilZero(10);
 ````
 
-### Function calls
+## Function calls
 Syntax for function calls:
 
 `(<function_name>  <params>)`
@@ -209,7 +209,7 @@ Where:
 + `<params>`: zero or more expressions
 
 
-#### Example:
+### Example:
 
 ````lisp
 (defun sumThreeNumbers (a b c) 
@@ -229,13 +229,13 @@ sumThreeNumbers(10, 5, 1);
 ````
 
 
-## Limitations and problems encountered
+# Limitations and problems encountered
 To do.
 
-## API
+# API
 To do.
 
-## Getting Started
+# Getting Started
 
 Getting up and running is as easy as 1, 2, 3.
 
