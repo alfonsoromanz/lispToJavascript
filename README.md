@@ -593,7 +593,7 @@ Getting up and running is as easy as 1, 2, 3.
 2. Clone the repo and install your dependencies
 
     ```
-   git clone https://github.com/alfonsoromanz/lispToJavascript.git;
+   git clone https://github.com/onfleet/alfonso-backend-homework.git;
    cd path/to/lispToJavascript;
    npm install
    ```
