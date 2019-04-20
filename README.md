@@ -9,6 +9,9 @@ Give it a try at
 [http://lisptojavascript.com](http://lisptojavascript.com)
 
 ## Test programs
+See the full list of test programs [here](https://github.com/onfleet/alfonso-backend-homework/tree/master/test_programs). 
+
+I'll be adding new ones soon.
 
 ### Factorial
 
@@ -62,10 +65,6 @@ while (count > 0) {
 };
 ````
 
-### Other examples
-
-Check more test programs [here](https://github.com/onfleet/alfonso-backend-homework/tree/master/test_programs)
-
 # Supported features
 
 ## Arithmetic operations
@@ -88,7 +87,9 @@ Gobal and local variables are supported using `defvar` and `let`
 ````
 
 ## Variable assignments
-Values can be assigned to variables during declaration (see above) or using `setq`
+Values can be assigned to variables during declaration (see above) or using `setq`.
+
+In this version of lisp, variable names can only contain letters.
 
 ````lisp
 (setq a 2) ; a = 2;
@@ -202,6 +203,55 @@ while (true) {
 };
 ```` 
 
+
+## Lists
+
+
+### Syntax for lists:
+
+`( <expression> [<expression>]* )`
+
+OR
+
+`'( <expression> [<expression>]* )`
+
+### Semantics
++ When the list is **not** preceded by a single quote **and** the first expression is an `IDENTIFIER`:
+     + If the `IDENTIFIER` matches a declared function, the list is evaluated as a function call. The rest of the expressions will be passed as parameters of the function (see [function calls](https://github.com/onfleet/alfonso-backend-homework#function-calls)).
+     + Otherwhise, the list is converted to an array  
+  
++ When the list is preceded by a single quote, the list is converted to an array
+
+### Example
+
+````lisp
+(defun sum (num) (+ num 1))
+
+(1 2 3)
+
+'(1 2 3)
+
+(sum 1 2)
+
+'(sum 1 2)
+
+(a 1 2)
+````
+
+Transpiles to:
+
+```javascript
+function sum(num) {
+num + 1;
+};
+[1, 2, 3];
+[1, 2, 3];
+sum(1, 2);
+[sum, 1, 2];
+[a, 1, 2];
+
+````
+
 ## Function declarations
 Functions are declared using the token `defun`. 
 
@@ -296,53 +346,6 @@ function sumThreeNumbers(a, b, c) {
 sumThreeNumbers(10, 5, 1);
 ````
 
-## Lists
-
-
-### Syntax for lists:
-
-`( <expression> [<expression>]* )`
-
-OR
-
-`'( <expression> [<expression>]* )`
-
-### Semantics
-+ When the list is **not** preceded by a single quote **and** the first expression is an `IDENTIFIER`:
-     + If the `IDENTIFIER` matches a declared function, the list is evaluated as a function call. The rest of the expressions will be passed as parameters of the function.
-     + Otherwhise, the list is converted to an array  
-  
-+ When the list is preceded by a single quote, the list is converted to an array
-
-### Example
-
-````lisp
-(defun sum (num) (+ num 1))
-
-(1 2 3)
-
-'(1 2 3)
-
-(sum 1 2)
-
-'(sum 1 2)
-
-(a 1 2)
-````
-
-Transpiles to:
-
-```javascript
-function sum(num) {
-num + 1;
-};
-[1, 2, 3];
-[1, 2, 3];
-sum(1, 2);
-[sum, 1, 2];
-[a, 1, 2];
-
-````
 
 # Limitations
 
@@ -370,26 +373,64 @@ sumTwoNumbers(10);
 
 Although it doesn't make sense.
 
-This is not a bad thing but this kind of behaviors can be avoided using a symbol table during "compilation" time. However, it was not worth the effort.
+This is not a bad thing but this kind of behaviors can be avoided using a symbol table during transpiling time. However, it was not worth the effort.
 
-### 2- My Grammar don't describe the world as LISP does
+### 2- My Grammar doesn't describe the world as LISP does
 
 I built the grammar trying to solve one thing at a time: variable declarations, variable assignments, functions, loops, arithmetics, etc. 
 
-But I didn't spend much time trying to understand the LISP semantics first, so my grammar brought me some troubles at the time to enforce the semantic described by LISP.
+But I realized that I didn't spend much time trying to understand the LISP semantics first, and that's why my grammar brought me some troubles at the time to enforce the semantic described by LISP.
 
 Some features are hard to support with my current grammar, like the single quote operator that has much more functionality in the original LISP.
 
+This can be improved in the future :)
 
 # Problems encountered
 
 ## Blanks (whitespaces)
 
-Since list elements are separated by one or more blanks (white spaces), the `blank` should be considered as a token the same way we do it with numbers or letters. 
+Since list elements are separated by one or more blanks (white spaces), the `blank` should be considered as a token the same way we do it with numbers or letters. For that reason, I've been forced to include the blanks in my grammar.
 
-TO DO.
+At first, my grammar was a mess. I had to take into account every possible situation in which the blanks could appear. The result was an unflexible grammar - which was very "blank sensitive". 
 
+For instance, this was valid:
 
+`(defvar a 1)`
+
+But this wasn't:
+
+`(  defvar a  1)`
+
+### How I solved it
+
+First I added a new step before the transpiling process. The whole idea was to pre-process the input to remove all the conflictive blanks between parenthesis
+
+`````javascript
+ /*
+  * Code preprocessing:
+  *   1 - Remove all repeated blanks
+  *   2 - Remove conflictive blanks before
+  *       and after parenthesis
+  *   3 - Remove conflictive blanks before and
+  *       after new lines
+  */ 
+  lispCode = 
+    lispCode
+      .replace(/ +/g, ' ')
+      .replace(/\( +/g, '(')
+      .replace(/ +\)/g, ')')
+      .replace(/\) +\(/g, ')(')
+      .replace(/ +\n/g, '\n')
+      .replace(/\n +/g, '\n')
+      .replace(/\) +/g, ')')
+      .replace(/ +\(/g, '(');
+`````
+
+After that, I fixed the grammar by removing all the `BLANKS` expected right before or after a parenthesis symbol, because the parenthesis is a disambiguator.
+
+**The result:**
+
+The code is not blank sensitive anymore, and the grammar is now more readable, maintainable, and scalable.
 
 # API
 

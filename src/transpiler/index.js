@@ -268,6 +268,8 @@ module.exports = async function transpileLispToJavascript (hook)  {
   *   1 - Remove all repeated blanks
   *   2 - Remove conflictive blanks before
   *       and after parenthesis
+  *   3 - Remove conflictive blanks before and
+  *       after new lines
   */ 
   lispCode = 
     lispCode
@@ -278,7 +280,7 @@ module.exports = async function transpileLispToJavascript (hook)  {
       .replace(/ +\n/g, '\n')
       .replace(/\n +/g, '\n')
       .replace(/\) +/g, ')')
-      .replace(/ +\(/g, '(')
+      .replace(/ +\(/g, '(');
       
 
 
