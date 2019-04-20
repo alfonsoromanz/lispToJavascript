@@ -15,8 +15,10 @@ Give it a try at
 Lisp:
 ```lisp
 (defun factorial (n) 
-(if (= n 0) (return-from factorial 1) 
-(return-from factorial (* n (factorial (- n 1)))))
+  (if (= n 0) 
+    (return-from factorial 1) 
+    (return-from factorial (* n (factorial (- n 1))))
+  )
 )
 
 (print (factorial 10))
@@ -38,12 +40,12 @@ Lisp:
 
 ````lisp
 (defvar count 10)
-(loop (if (> count 1) 
-(setq count (- count 1)) 
-(progn 
-(setq count (- count 1))
-(print "last iteration"))) 
-(when (> count 0) (return count)))
+  (loop (if (> count 1) 
+    (setq count (- count 1)) 
+    (progn 
+      (setq count (- count 1))
+      (print "last iteration"))) 
+  (when (> count 0) (return count)))
 ````
 
 Transpiles to:
@@ -133,8 +135,14 @@ if (a > b) {
 Using `prog-n` we can have multiple sentences in any of the branches:
 
 ````lisp
-(if (= a b) (progn (setq a 0) (setq b 0)) (progn 
-(print a) (print b)))
+(if (= a b) 
+  (progn 
+    (setq a 0) 
+    (setq b 0)) 
+  (progn 
+    (print a) 
+    (print b))
+)
 ```` 
 
 ````javascript
@@ -155,7 +163,10 @@ Syntax for loops:
 ### Examples:
 
 ````lisp
-(loop (setq a (+ a 1)) (when (> a 10) (return a)))
+(loop 
+  (setq a (+ a 1)) 
+  (when (> a 10) (return a))
+)
 ```` 
 Is equivalent to: 
 
@@ -168,7 +179,9 @@ while (a > 10) {
 If the `when` clause is not provided, it will produce an infinite loop:
 
 ````lisp
-(loop (setq a (+ a 1)))
+(loop 
+ (setq a (+ a 1))
+)
 ```` 
 
 Javascript:
@@ -203,7 +216,9 @@ return-from myfunction 10
 Sum two numbers:
 
 ````lisp
-(defun sum (a b) (return-from sum (+ a b)))
+(defun sum (a b) 
+ (return-from sum (+ a b))
+)
 ```` 
 
 Transpiles to:
@@ -216,7 +231,12 @@ function sum(a, b) {
 **Recursive functions are also supported**. The following function:
 ````lisp
 (defun printUntilZero (a) 
-(if (> a 0) (progn (print a) (setq a (- a 1)) (printUntilZero a)) (print a))
+  (if (> a 0) 
+    (progn 
+      (print a) 
+      (setq a (- a 1)) 
+      (printUntilZero a)) 
+    (print a))
 )
 
 (printUntilZero 10)
@@ -251,7 +271,7 @@ Where:
 
 ````lisp
 (defun sumThreeNumbers (a b c) 
-(return-from sumThreeNumbers (+ a (+ b c)))
+ (return-from sumThreeNumbers (+ a (+ b c)))
 )
 
 (sumThreeNumbers 10 5 1)
@@ -281,17 +301,61 @@ Syntax for lists:
 ### Example 
 
 ````lisp
-(defvar a (1 2 3 4))
+(defvar a (10 3 4))
 ````
 
 Transpiles to:
 
 ```javascript
-var a = [1, 2, 3, 4];
+var a = [10, 3, 4];
 ````
 
-# Limitations and problems encountered
-To do.
+# Limitations
+
+### 1- I'm not validating any semantic rule
+This solution only validates that the lisp programs are syntactically correct but I don't do any semantic validations. In other words, I can't guarantee that your code makes sense :-)
+
+For instance, if you declare a function that expects two arguments and you call it with 1 argument:
+
+```lisp
+(defun sumTwoNumbers (a b) 
+   (return-from sumTwoNumbers (+ a  b))
+)
+
+(sumTwoNumbers 10)
+```
+
+The code is valid syntactically and will generate the following javascript:
+
+````javascript
+function sumTwoNumbers(a, b) {
+  return a + b;
+};
+sumTwoNumbers(10);
+````
+
+Although it doesn't make sense.
+
+This is not a bad thing but this kind of behaviors can be avoided using a symbol table during "compilation" time. However, it was not worth the effort.
+
+
+### 2- To Do
+
+
+
+
+
+
+
+# Problems encountered
+
+## Blanks (whitespaces)
+
+Since list elements are separated by one or more blanks (white spaces), the `blank` should be considered as a token the same way we do it with numbers or letters. 
+
+TO DO.
+
+
 
 # API
 
