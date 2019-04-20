@@ -65,6 +65,10 @@ while (count > 0) {
 };
 ````
 
+# Grammar specification
+
+See the grammar in BNF notation [by clicking here](https://github.com/onfleet/alfonso-backend-homework/blob/master/src/transpiler/grammar.jison)
+
 # Supported features
 
 ## Arithmetic operations
@@ -431,6 +435,20 @@ After that, I fixed the grammar by removing all the `BLANKS` expected right befo
 **The result:**
 
 The code is not blank sensitive anymore, and the grammar is now more readable, maintainable, and scalable.
+
+## Return values
+
+In LISP functions, the last expression is returned. 
+
+At first, I was adding a return sentence to the last expression of a function to return the value. That strategy worked fine except for the cases where the last sentence was a branch: the transpiler was adding a `return` right before the `IF-THEN` sentence. It was wrong.
+
+That's why I decided that the values should be returned explicitly by the programmer using the `return-from` statement.
+
+## Lists vs Function Calls
+
+Because of the limitations of my grammar, I wasn't able to distinguish a list from a function call (both looks pretty similar). The way I decided to approach this is by checking if the first expression of the list was an identifier matching a declared function. If it was, the list is considered as a function call.
+
+
 
 # API
 
