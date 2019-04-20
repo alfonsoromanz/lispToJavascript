@@ -196,10 +196,10 @@ logic_operation
             * into a stack and decide how to use them later when a new rule is
             * found (e.g array, function call, or logic_operations)
             */
-            $$ = `${$3} || ${$4}`
+            $$ = `(${$3} || ${$4})`
         }
     | '(' AND condition condition ')'
-        {$$ = `${$3} AND ${$4}`}
+        {$$ = `(${$3} && ${$4})`}
     | '(' NOT condition ')'
         {$$ = `!${$3}`}
     | condition

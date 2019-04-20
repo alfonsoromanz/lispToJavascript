@@ -105,6 +105,16 @@ The following operators are supported: `>`, `<`, `=`, and `/=`
 (/= 1 2) ; 1 !== 2
 ````
 
+**Conditions also support complex logical operations** using `and`, `or`, and `not`
+
+````lisp
+(or 1 2) ; (1 || 2)
+(not b) ; !b
+(and (or a b) c) ; ((a || b) && c)
+( not (and (or a b) c)) ; !((a || b) && c)
+(or (< a b) (> b a)) ; (a < b || b > a)
+````
+
 ## If-else statements
 
 Syntax:
@@ -362,10 +372,13 @@ Although it doesn't make sense.
 
 This is not a bad thing but this kind of behaviors can be avoided using a symbol table during "compilation" time. However, it was not worth the effort.
 
+### 2- My Grammar don't describe the world as LISP does
 
+I built the grammar trying to solve one thing at a time: variable declarations, variable assignments, functions, loops, arithmetics, etc. 
 
+But I didn't spend much time trying to understand the LISP semantics first, so my grammar brought me some troubles at the time to enforce the semantic described by LISP.
 
-
+Some features are hard to support with my current grammar, like the single quote operator that has much more functionality in the original LISP.
 
 
 # Problems encountered
