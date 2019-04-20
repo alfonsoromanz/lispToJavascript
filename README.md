@@ -381,9 +381,9 @@ I built the grammar trying to solve one thing at a time: variable declarations, 
 
 But I realized that I didn't spend much time trying to understand the LISP semantics first, and that's why my grammar brought me some troubles at the time to enforce the semantic described by LISP.
 
-Some features are hard to support with my current grammar, like the single quote operator that has much more functionality in the original LISP.
+Some features are hard to support with my current grammar, like the single quote operator that has much more functionality in the original LISP, or even the n-ary operators like `+`, `-`, `*`, `/=`, `>`, `<`, etc. My version currently supports only binary operators.
 
-This can be improved in the future :)
+A better grammar could be provided in the future.
 
 # Problems encountered
 
