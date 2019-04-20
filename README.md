@@ -594,7 +594,7 @@ Getting up and running is as easy as 1, 2, 3.
 
     ```
    git clone https://github.com/onfleet/alfonso-backend-homework.git;
-   cd path/to/lispToJavascript;
+   cd path/to/alfonso-backend-homework;
    npm install
    ```
 
