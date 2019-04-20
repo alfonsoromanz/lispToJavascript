@@ -39,20 +39,18 @@ sentence
     | print_sentence
     | return_sentence 
     | loop_sentence
-    | BLANK
-        {$$=''}
     ;
 
 variable_declaration
-    : '(' DEFVAR BLANK IDENTIFIER BLANK s_expression ')'
-        {$$ = `var ${$4} = ${$6};`}
-    | '(' LET BLANK IDENTIFIER BLANK s_expression ')'
-        {$$ = `let ${$4} = ${$6};`}
+    : '(' DEFVAR identifier s_expression ')'
+        {$$ = `var ${$3} = ${$4};`}
+    | '(' LET identifier s_expression ')'
+        {$$ = `let ${$3} = ${$4};`}
     ;
 
 variable_assignment
-    : '(' SETQ BLANK IDENTIFIER BLANK s_expression ')'
-        {$$= `${$4} = ${$6};`}
+    : '(' SETQ identifier s_expression ')'
+        {$$= `${$3} = ${$4};`}
     ;
 
 s_expression
@@ -63,32 +61,26 @@ s_expression
     | arithmetic_operation
     ;
 
-s_expression_list
-    : s_expression_list BLANK s_expression
-        {$$=`${$1} ${$3}`}
-    | s_expression
-    ;
-
 return_sentence
-    : '(' RETURNFROM BLANK IDENTIFIER BLANK s_expression ')'
-        {$$=`return ${$6}`}
+    : '(' RETURNFROM identifier s_expression ')'
+        {$$=`return ${$4}`}
     ;
 
 loop_sentence
-    : '(' LOOP list_of_sentences '(' WHEN BLANK condition BLANK  '(' RETURN BLANK IDENTIFIER ')' ')' ')'
-        {$$=`while (${$7}) {\n${$3}\n}`}
+    : '(' LOOP list_of_sentences '(' WHEN condition  '(' RETURN s_expression ')' ')' ')'
+        {$$=`while (${$6}) {\n${$3}\n}`}
     | '(' LOOP list_of_sentences ')'
         {$$=`while (true) {\n${$3}\n}`}
     ;
 print_sentence
-    : '(' PRINT BLANK s_expression ')'
-        {$$=`console.log(${$4})`}}
-    | '(' PRINT BLANK STRING ')'
-        {$$=`console.log(${$4})`}}
+    : '(' PRINT s_expression ')'
+        {$$=`console.log(${$3})`}}
+    | '(' PRINT string ')'
+        {$$=`console.log(${$3})`}}
     ;
 
 function_declaration
-    : '(' function_name BLANK '(' list ')' BLANK list_of_sentences ')'
+    : '(' function_name '(' list ')' list_of_sentences ')'
         {   
             /*
             * Adding a return to the last statement of a function - this will be removed.
@@ -114,7 +106,7 @@ function_declaration
            
             //$$=`function ${$2}(${$5}) {\n${buffer}}`
 
-            $$=`function ${$2}(${$5}) {\n${$8}}`
+            $$=`function ${$2}(${$4}) {\n${$6}}`
 
 
             /* More Comments about the commented code above:
@@ -135,10 +127,10 @@ function_declaration
     ;
 
 function_name
-    : DEFUN BLANK IDENTIFIER
+    : DEFUN identifier
         {
-            functions.push($3);
-            $$=$3;
+            functions.push($2);
+            $$=$2;
         }
     ;
 atom_list
@@ -170,25 +162,25 @@ atom_list
     ;
 
 list
-    : list BLANK s_expression
-        {$$=`${$1}, ${$3}`}
+    : list s_expression
+        {$$=`${$1}, ${$2}`}
     | s_expression
         {$$=$1}
     ;
 
 arithmetic_operation
-    : '(' '+' BLANK s_expression BLANK s_expression ')'
-        {$$ = `${$4} + ${$6}`}
-    | '(' '-' BLANK s_expression BLANK s_expression ')'
-        {$$ = `${$4} - ${$6}`}
-    | '(' '*' BLANK s_expression BLANK s_expression ')'
-        {$$ = `${$4} * ${$6}`}
-    |  '(' '/' BLANK s_expression BLANK s_expression ')'
-        {$$ = `${$4} / ${$6}`}
+    : '(' '+' s_expression s_expression ')'
+        {$$ = `${$3} + ${$4}`}
+    | '(' '-' s_expression s_expression ')'
+        {$$ = `${$3} - ${$4}`}
+    | '(' '*' s_expression s_expression ')'
+        {$$ = `${$3} + ${$4}`}
+    |  '(' '/' s_expression s_expression ')'
+        {$$ = `${$3} + ${$4}`}
     ;
 
 logic_operation
-    : '(' OR BLANK condition BLANK condition ')'
+    : '(' OR condition condition ')'
         {
             /*
             * Currently this format doesn't allow to have conditions
@@ -202,46 +194,65 @@ logic_operation
             * into a stack and decide how to use them later when a new rule is
             * found (e.g array, function call, or logic_operations)
             */
-            $$ = `${$3} || ${$5}`
+            $$ = `${$3} || ${$4}`
         }
-    | '(' AND BLANK condition BLANK condition ')'
-        {$$ = `${$3} && ${$5}`}
-    | '(' NOT BLANK condition ')'
+    | '(' AND condition condition ')'
+        {$$ = `${$3} AND ${$4}`}
+    | '(' NOT condition ')'
         {$$ = `!${$3}`}
     | condition
     ;
 
 condition 
-    : '(' '=' BLANK s_expression BLANK s_expression ')'
-        {$$ = `${$4} === ${$6}`}
-    | '(' '>' BLANK s_expression BLANK s_expression ')'
-        {$$ = `${$4} > ${$6}`}
-    | '(' '<' BLANK s_expression BLANK s_expression ')'
-        {$$ = `${$4} < ${$6}`}
-    | '(' '/=' BLANK s_expression BLANK s_expression ')'
-        {$$ = `${$4} !== ${$6}`}
+    : '(' '=' s_expression s_expression ')'
+        {$$ = `${$3} === ${$4}`}
+    | '(' '>' s_expression s_expression ')'
+        {$$ = `${$3} > ${$4}`}
+    | '(' '<' s_expression s_expression ')'
+        {$$ = `${$3} < ${$4}`}
+    | '(' '/=' s_expression s_expression ')'
+        {$$ = `${$3} !== ${$4}`}
     | s_expression
     ;
 
 if_sentence
-    : '(' IF BLANK condition BLANK sentence BLANK sentence ')'
+    : '(' IF condition sentence sentence ')'
         {
-            $$=`if (${$4}) {\n${$6}\n} else {\n${$8}\n}`
+            $$=`if (${$3}) {\n${$4}\n} else {\n${$5}\n}`
         }
-    | '(' IF BLANK condition BLANK '(' PROGN BLANK list_of_sentences ')' BLANK sentence ')'
+    | '(' IF condition '(' PROGN list_of_sentences ')' sentence ')'
         {
-            $$=`if (${$4}) {\n${$9}\n} else {\n${$12}\n}`
+            $$=`if (${$3}) {\n${$6}\n} else {\n${$8}\n}`
         }
-    | '(' IF BLANK condition BLANK '(' PROGN BLANK list_of_sentences ')' BLANK '(' PROGN BLANK list_of_sentences ')' ')'
+    | '(' IF condition '(' PROGN list_of_sentences ')' '(' PROGN list_of_sentences ')' ')'
         {
-            $$=`if (${$4}) {\n${$9}\n} else {\n${$15}\n}`
+            $$=`if (${$3}) {\n${$6}\n} else {\n${$10}\n}`
         }
-     | '(' IF BLANK condition BLANK sentence BLANK '(' PROGN BLANK list_of_sentences ')' ')'
+     | '(' IF condition sentence '(' PROGN list_of_sentences ')' ')'
         {
-            $$=`if (${$4}) {\n${$6}\n} else {\n${$11}\n}`
+            $$=`if (${$3}) {\n${$4}\n} else {\n${$7}\n}`
         }
     ;
+
 atom
+    : identifier
+    | const_int 
+    ;
+
+identifier
     : IDENTIFIER
-    | CONST_INT 
+    | BLANK IDENTIFIER
+        {$$=$2}
+    ;
+
+const_int
+    : CONST_INT 
+    | BLANK CONST_INT
+        {$$=$2}
+    ;
+
+string 
+    : STRING 
+    | BLANK STRING
+        {$$=$2}
     ;

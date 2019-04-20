@@ -266,7 +266,13 @@ module.exports = async function transpileLispToJavascript (hook)  {
     lispCode
       .replace(/ +/g, ' ')
       .replace(/\( +/g, '(')
-      .replace(/ +\)/g, ')');
+      .replace(/ +\)/g, ')')
+      .replace(/\) +\(/g, ')(')
+      .replace(/ +\n/g, '\n')
+      .replace(/\n +/g, '\n')
+      .replace(/\) +/g, ')')
+      .replace(/ +\(/g, '(')
+      
 
 
   try {
