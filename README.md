@@ -288,26 +288,50 @@ sumThreeNumbers(10, 5, 1);
 
 ## Lists
 
-Lists are supported but none feature was developed yet.
 
-Syntax for lists:
+### Syntax for lists:
 
 `( <expression> [<expression>]* )`
 
-(One or more expressions surrounded by parenthesis).
+OR
 
-**Note:** if the first expression is an identifier and matches the name of a declared function, the list will be recognized as a function call.
+`'( <expression> [<expression>]* )`
 
-### Example 
+### Semantics
++ When the list is **not** preceded by a single quote **and** the first expression is an `IDENTIFIER`:
+     + If the `IDENTIFIER` matches a declared function, the list is evaluated as a function call. The rest of the expressions will be passed as parameters of the function.
+     + Otherwhise, the list is converted to an array  
+  
++ When the list is preceded by a single quote, the list is converted to an array
+
+### Example
 
 ````lisp
-(defvar a (10 3 4))
+(defun sum (num) (+ num 1))
+
+(1 2 3)
+
+'(1 2 3)
+
+(sum 1 2)
+
+'(sum 1 2)
+
+(a 1 2)
 ````
 
 Transpiles to:
 
 ```javascript
-var a = [10, 3, 4];
+function sum(num) {
+num + 1;
+};
+[1, 2, 3];
+[1, 2, 3];
+sum(1, 2);
+[sum, 1, 2];
+[a, 1, 2];
+
 ````
 
 # Limitations
@@ -337,9 +361,6 @@ sumTwoNumbers(10);
 Although it doesn't make sense.
 
 This is not a bad thing but this kind of behaviors can be avoided using a symbol table during "compilation" time. However, it was not worth the effort.
-
-
-### 2- To Do
 
 
 
