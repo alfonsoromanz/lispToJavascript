@@ -9,7 +9,7 @@ Give it a try at
 [http://lisptojavascript.com](http://lisptojavascript.com)
 
 ## Test programs
-See the full list of test programs [here](https://github.com/onfleet/alfonso-backend-homework/tree/master/test_programs). 
+See the full list of test programs [here](https://github.com/alfonsoromanz/lispToJavascript/tree/master/test_programs). 
 
 I'll be adding new ones soon.
 
@@ -67,7 +67,7 @@ while (count > 0) {
 
 # Grammar specification
 
-See the grammar in BNF notation [by clicking here](https://github.com/onfleet/alfonso-backend-homework/blob/master/src/transpiler/grammar.jison)
+See the grammar in BNF notation [by clicking here](https://github.com/alfonsoromanz/lispToJavascript/blob/master/src/transpiler/grammar.jison)
 
 # Supported features
 
@@ -221,7 +221,7 @@ OR
 
 ### Semantics
 + When the list is **not** preceded by a single quote **and** the first expression is an `IDENTIFIER`:
-     + If the `IDENTIFIER` matches a declared function, the list is evaluated as a function call. The rest of the expressions will be passed as parameters of the function (see [function calls](https://github.com/onfleet/alfonso-backend-homework#function-calls)).
+     + If the `IDENTIFIER` matches a declared function, the list is evaluated as a function call. The rest of the expressions will be passed as parameters of the function (see [function calls](https://github.com/alfonsoromanz/lispToJavascript#function-calls)).
      + Otherwhise, the list is converted to an array  
   
 + When the list is preceded by a single quote, the list is converted to an array
@@ -593,8 +593,8 @@ Getting up and running is as easy as 1, 2, 3.
 2. Clone the repo and install your dependencies
 
     ```
-   git clone https://github.com/onfleet/alfonso-backend-homework.git;
-   cd path/to/alfonso-backend-homework;
+   git clone https://github.com/alfonsoromanz/lispToJavascript.git;
+   cd path/to/lispToJavascript;
    npm install
    ```
 
