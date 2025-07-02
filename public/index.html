@@ -1,7 +1,10 @@
-<html>
-  <script src="index.js"></script>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lisp To Javascript Transpiler</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
       * {
         margin: 0;
@@ -9,114 +12,256 @@
         box-sizing: border-box;
       }
 
+      :root {
+        --bg-primary: #1e1e1e;
+        --bg-secondary: #252526;
+        --bg-tertiary: #2d2d30;
+        --text-primary: #cccccc;
+        --text-secondary: #969696;
+        --text-accent: #569cd6;
+        --border: #3e3e42;
+        --green: #4ec9b0;
+        --blue: #9cdcfe;
+        --purple: #c586c0;
+        --orange: #ce9178;
+        --red: #f44747;
+        --yellow: #dcdcaa;
+      }
+
       html, body {
-        font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
-        font-weight: 400;
-        font-size: 16px;
-        color: #333;
-      }
-      
-      .containerCode {
-        display:flex;
-        flex-direction: row;
-        justify-content: center;
-        padding-top: 10px;
+        font-family: 'Inter', sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        height: 100vh;
+        overflow: hidden;
       }
 
-      #code {
-        width: 400px;
-        float: left;
-        height: 500px;
-        font-size: 18px !important;
-        margin-right: 10px;
+      .app-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
       }
 
-      #transpiledCode {
-          width: 400px;
-          height: 500px;  
-          font-size: 18px !important; 
-      }
-
-      .center-text {
+      .header {
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 2rem;
         text-align: center;
       }
 
-      main {
-        padding: 20px;
-        margin-top: 20px;
+      .header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
       }
 
-      img.logo {
-        display: block;
-        margin: 0 auto;
-        max-width: 100%;
-        margin-bottom: 30px;
+      .header .subtitle {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
       }
 
-
-      h2 {
-        font-size: 1.6em;
-        font-weight: 150;
+      .header .links {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
       }
 
-      p{
-
-        font-weight: 300;
-        font-size: 1.1em;
-        
-      }
-
-      p.check-github {
-        padding-top: 20px;
-        font-size: 1em;
-       
-      }
-
-      footer {
-        bottom: 0;
-        padding: 10px;
-      }
-
-      
-
-      footer p {
-        font-weight: 300;
-        font-size: 1.0em;
-      }
-
-      a {
-        color: #31D8A0;
+      .header .links a {
+        color: var(--text-accent);
         text-decoration: none;
-        font-weight: 20;
+        transition: color 0.2s;
       }
 
-      a:hover,
-      a:focus {
-        color: #31D8A0;
+      .header .links a:hover {
+        color: var(--green);
       }
+
+      .editor-container {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .editor-pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--border);
+      }
+
+      .editor-pane:last-child {
+        border-right: none;
+      }
+
+      .pane-header {
+        background: var(--bg-secondary);
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .pane-icon {
+        width: 16px;
+        height: 16px;
+        opacity: 0.7;
+      }
+
+      .editor-textarea {
+        flex: 1;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border: none;
+        outline: none;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        padding: 1rem;
+        resize: none;
+        tab-size: 2;
+        white-space: pre;
+        overflow-wrap: normal;
+        overflow-x: auto;
+      }
+
+      .editor-textarea::placeholder {
+        color: var(--text-secondary);
+        opacity: 0.6;
+      }
+
+      .editor-textarea:focus {
+        background: var(--bg-primary);
+      }
+
+      .output-textarea {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+
+      .status-bar {
+        background: var(--bg-secondary);
+        border-top: 1px solid var(--border);
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .status-left {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .status-right {
+        display: flex;
+        gap: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .editor-container {
+          flex-direction: column;
+        }
+        
+        .editor-pane {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        
+        .editor-pane:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .lisp-syntax .paren { color: var(--yellow); }
+      .lisp-syntax .keyword { color: var(--purple); font-weight: 500; }
+      .lisp-syntax .function { color: var(--blue); }
+      .lisp-syntax .string { color: var(--orange); }
+      .lisp-syntax .number { color: var(--green); }
+      .lisp-syntax .comment { color: var(--text-secondary); font-style: italic; }
+
+      .js-syntax .keyword { color: var(--purple); font-weight: 500; }
+      .js-syntax .string { color: var(--orange); }
+      .js-syntax .number { color: var(--green); }
+      .js-syntax .function { color: var(--yellow); }
+      .js-syntax .comment { color: var(--text-secondary); font-style: italic; }
+      .js-syntax .operator { color: var(--text-primary); }
     </style>
   </head>
   <body>
-      <div id="app" class="flex flex-column"></div>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
-      <script src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
-      <script src="/socket.io/socket.io.js"></script>
-      <script src="app.js"></script>
-    <main class="container">
-      
-      <h1 class="center-text">Basic LISP to Javascript Transpiler.</h1>
-      <h2 class="center-text">By Alfonso Roman Zubeldia</h2>
-      <p class="center-text">(<a href="https://www.linkedin.com/in/alfonsoromanz/" title="Linkedin profile" target="blank">Linkedin</a>, <a href="https://angel.co/alfonso-roman-y-zubeldia" title="Angel.co profile" target="blank">Angel.co</a>)</p>
-      <p class="center-text check-github"> Check github for <a href="https://github.com/alfonsoromanz/lispToJavascript/tree/master/test_programs" title="Program examples" target="blank">examples</a> and <a href="https://github.com/alfonsoromanz/lispToJavascript#basic-lisp-to-javascript-transpiler" title="Transpiler docs" target="blank">documentation</a></p>
-      <div class="containerCode">
-          <textarea id="code" placeholder="Enter lisp code..."onInput="convertCode()"></textarea>
-          <textarea readonly id="transpiledCode"></textarea>
-      </div> 
-    
-      
-      <footer>
-          <p class="center-text">See it on <a href="https://github.com/alfonsoromanz/lispToJavascript" title="Lisp to Javascript Compiler" target="blank">GitHub</a>.</p>
-        </footer>
-    </main>
+    <div class="app-container">
+      <header class="header">
+        <h1>LISP to JavaScript Transpiler</h1>
+        <div class="subtitle">By Alfonso Roman Zubeldia</div>
+        <div class="links">
+          (<a href="https://www.linkedin.com/in/alfonsoromanz/" target="_blank">LinkedIn</a>, 
+          <a href="https://angel.co/alfonso-roman-y-zubeldia" target="_blank">Angel.co</a>) • 
+          <a href="https://github.com/alfonsoromanz/lispToJavascript/tree/master/test_programs" target="_blank">Examples</a> • 
+          <a href="https://github.com/alfonsoromanz/lispToJavascript#basic-lisp-to-javascript-transpiler" target="_blank">Documentation</a>
+        </div>
+      </header>
+
+      <div class="editor-container">
+        <div class="editor-pane">
+          <div class="pane-header">
+            <svg class="pane-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+              <path d="M6.854 4.646a.5.5 0 0 1 0 .708L4.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0zm2.292 0a.5.5 0 0 0 0 .708L11.793 8l-2.647 2.646a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0z"/>
+            </svg>
+            input.lisp
+          </div>
+          <textarea 
+            id="code" 
+            class="editor-textarea lisp-syntax" 
+            placeholder="Enter LISP code here...
+
+Example:
+(defun factorial (n)
+  (if (<= n 1)
+      1
+      (* n (factorial (- n 1)))))"
+            oninput="convertCode()"
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <div class="editor-pane">
+          <div class="pane-header">
+            <svg class="pane-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z"/>
+              <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"/>
+            </svg>
+            output.js
+          </div>
+          <textarea 
+            id="transpiledCode" 
+            class="editor-textarea output-textarea js-syntax" 
+            readonly
+            placeholder="Transpiled JavaScript will appear here..."
+            spellcheck="false"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-left">
+          <span>Ready</span>
+        </div>
+        <div class="status-right">
+          <span>LISP → JS</span>
+          <a href="https://github.com/alfonsoromanz/lispToJavascript" target="_blank" style="color: var(--text-accent);">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
+    <script src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>
