@@ -1,7 +1,7 @@
 %start lisp_program
 
 %{
-var functions = [];
+// Functions array will be provided by the parser.yy object
 %}
 
 %% /* language grammar */
@@ -69,7 +69,7 @@ return_sentence
 
 loop_sentence
     : '(' LOOP list_of_sentences '(' WHEN condition  '(' RETURN s_expression ')' ')' ')'
-        {$$=`while (${$6}) {\n${$3}\n}`}
+        {$$=`while (true) {\n${$3};\nif (${$6}) break;\n}`}
     | '(' LOOP list_of_sentences ')'
         {$$=`while (true) {\n${$3}\n}`}
     ;
@@ -83,14 +83,19 @@ print_sentence
 function_declaration
     : '(' function_name '(' list ')' list_of_sentences ')'
         {   
-            $$=`function ${$2}(${$4}) {\n${$6}}`
+            $$=`function ${$2}(${$4}) {\n${$6}\n}`
+        }
+    | '(' function_name '(' ')' list_of_sentences ')'
+        {   
+            $$=`function ${$2}() {\n${$5}\n}`
         }
     ;
 
 function_name
     : DEFUN identifier
         {
-            functions.push($2);
+            if (!yy.functions) yy.functions = [];
+            yy.functions.push($2);
             $$=$2;
         }
     ;
@@ -106,6 +111,7 @@ atom_list
             
             let elements = String($2).split(',');
             let first = elements[0].trim();
+            let functions = yy.functions || [];
             if (functions.indexOf(first)!==-1) {
                 let bffer = "";
                 for (let i=1; i<elements.length; i++) {
@@ -120,8 +126,12 @@ atom_list
                 $$ = `[${$2}]`
             }      
         }
+    | '(' ')'
+        {$$ = `[]`}
     | "'" '(' list ')' 
         {$$ = `[${$3}]`}
+    | "'" '(' ')'
+        {$$ = `[]`}
     ;
 
 list
@@ -149,7 +159,6 @@ logic_operation
         {$$ = `(${$3} && ${$4})`}
     | '(' NOT condition ')'
         {$$ = `!${$3}`}
-    | condition
     ;
 
 condition 
@@ -161,17 +170,17 @@ condition
         {$$ = `${$3} < ${$4}`}
     | '(' '/=' s_expression s_expression ')'
         {$$ = `${$3} !== ${$4}`}
-    | s_expression
+    | atom
     ;
 
 if_sentence
     : '(' IF condition sentence sentence ')'
         {
-            $$=`if (${$3}) {\n${$4}\n} else {\n${$5}\n}`
+            $$=`if (${$3}) {\n${$4};\n} else {\n${$5};\n}`
         }
     | '(' IF condition '(' PROGN list_of_sentences ')' sentence ')'
         {
-            $$=`if (${$3}) {\n${$6}\n} else {\n${$8}\n}`
+            $$=`if (${$3}) {\n${$6}\n} else {\n${$8};\n}`
         }
     | '(' IF condition '(' PROGN list_of_sentences ')' '(' PROGN list_of_sentences ')' ')'
         {
@@ -179,13 +188,14 @@ if_sentence
         }
      | '(' IF condition sentence '(' PROGN list_of_sentences ')' ')'
         {
-            $$=`if (${$3}) {\n${$4}\n} else {\n${$7}\n}`
+            $$=`if (${$3}) {\n${$4};\n} else {\n${$7}\n}`
         }
     ;
 
 atom
     : identifier
     | const_int 
+    | string
     ;
 
 identifier
