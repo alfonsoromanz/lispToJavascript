@@ -191,6 +191,134 @@
       .js-syntax .function { color: var(--yellow); }
       .js-syntax .comment { color: var(--text-secondary); font-style: italic; }
       .js-syntax .operator { color: var(--text-primary); }
+
+      .examples-btn {
+        background: none;
+        border: none;
+        color: var(--text-accent);
+        cursor: pointer;
+        font-size: inherit;
+        text-decoration: none;
+        transition: color 0.2s;
+        padding: 0;
+        font-family: inherit;
+      }
+
+      .examples-btn:hover {
+        color: var(--green);
+      }
+
+      .examples-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .examples-modal.show {
+        display: flex;
+      }
+
+      .examples-content {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .examples-header {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .examples-header h3 {
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        margin: 0;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-size: 1.5rem;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .close-btn:hover {
+        color: var(--text-primary);
+      }
+
+      .examples-list {
+        padding: 0;
+      }
+
+      .example-item {
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .example-item:last-child {
+        border-bottom: none;
+      }
+
+      .example-item:hover {
+        background: var(--bg-tertiary);
+      }
+
+      .example-header {
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .example-title {
+        color: var(--text-primary);
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .example-description {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin: 0.25rem 0 0 0;
+      }
+
+      .try-btn {
+        background: var(--text-accent);
+        color: var(--bg-primary);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: background-color 0.2s;
+      }
+
+      .try-btn:hover {
+        background: var(--blue);
+      }
     </style>
   </head>
   <body>
@@ -199,9 +327,8 @@
         <h1>LISP to JavaScript Transpiler</h1>
         <div class="subtitle">By Alfonso Roman Zubeldia</div>
         <div class="links">
-          (<a href="https://www.linkedin.com/in/alfonsoromanz/" target="_blank">LinkedIn</a>, 
-          <a href="https://angel.co/alfonso-roman-y-zubeldia" target="_blank">Angel.co</a>) • 
-          <a href="https://github.com/alfonsoromanz/lispToJavascript/tree/master/test_programs" target="_blank">Examples</a> • 
+          <a href="https://www.linkedin.com/in/alfonsoromanz/" target="_blank">LinkedIn</a> • 
+          <button id="examplesBtn" class="examples-btn">Examples</button> • 
           <a href="https://github.com/alfonsoromanz/lispToJavascript#basic-lisp-to-javascript-transpiler" target="_blank">Documentation</a>
         </div>
       </header>
@@ -255,6 +382,53 @@ Example:
         <div class="status-right">
           <span>LISP → JS</span>
           <a href="https://github.com/alfonsoromanz/lispToJavascript" target="_blank" style="color: var(--text-accent);">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="examplesModal" class="examples-modal">
+      <div class="examples-content">
+        <div class="examples-header">
+          <h3>LISP Code Examples</h3>
+          <button class="close-btn" onclick="closeExamples()">&times;</button>
+        </div>
+        <div class="examples-list">
+          <div class="example-item" onclick="loadExample('factorial')">
+            <div class="example-header">
+              <div>
+                <div class="example-title">Factorial Function</div>
+                <div class="example-description">Recursive factorial calculation</div>
+              </div>
+              <button class="try-btn">Try It</button>
+            </div>
+          </div>
+          <div class="example-item" onclick="loadExample('sum')">
+            <div class="example-header">
+              <div>
+                <div class="example-title">Sum Two Numbers</div>
+                <div class="example-description">Basic function definition and variable usage</div>
+              </div>
+              <button class="try-btn">Try It</button>
+            </div>
+          </div>
+          <div class="example-item" onclick="loadExample('loop')">
+            <div class="example-header">
+              <div>
+                <div class="example-title">Simple Loop</div>
+                <div class="example-description">Loop with conditional exit</div>
+              </div>
+              <button class="try-btn">Try It</button>
+            </div>
+          </div>
+          <div class="example-item" onclick="loadExample('recursive')">
+            <div class="example-header">
+              <div>
+                <div class="example-title">Recursive Function</div>
+                <div class="example-description">Countdown using recursion</div>
+              </div>
+              <button class="try-btn">Try It</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
